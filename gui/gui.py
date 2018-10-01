@@ -15,7 +15,7 @@ def callback():
 def save_output():
     name = filedialog.asksaveasfile(mode='w', title='Save output',
                                     filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
-    print(name.read())
+    name.write("hewwo?")
 
 
 #################################################################
