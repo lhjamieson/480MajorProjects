@@ -39,7 +39,7 @@ def help_callback():
 smcm_blue = '#1d285a'
 logo_path = "images\\college-logo.gif"
 print_icon_path = 'images\\print-icon.gif'
-help_icon_path = 'images\\print-icon.gif'
+help_icon_path = 'images\\help-icon.gif'
 about_icon_path = 'images\\info-icon.gif'
 
 #################################################################
