@@ -23,11 +23,33 @@ def save_output():
     name.write("hewwo?")
 
 
+# Called when info button is pressed
+# Prints the INFO section of the README file
+# Someday, we will make it so this function causes a popup with the info printed onto it
 def info_callback():
+    f = open(README_path, 'r')
+    lines = f.readlines()
+    for line in lines:
+        if line.__contains__('HELP'):
+            break
+        print(line)
+    f.close()
     print('info button was successfully pressed')
 
 
+# Called when help button is pressed
+# Prints the HELP section of the README file
+# Someday, we will make it so this function causes a popup with the info printed onto it
 def help_callback():
+    f = open(README_path, 'r')
+    lines = f.readlines()
+    HELP_flag = False
+    for line in lines:
+        if line.__contains__('HELP'):
+            HELP_flag = True
+        if HELP_flag:
+            print(line)
+    f.close()
     print('help button was successfully pressed')
 
 
@@ -39,8 +61,9 @@ def help_callback():
 smcm_blue = '#1d285a'
 logo_path = "images\\college-logo.gif"
 print_icon_path = 'images\\print-icon.gif'
-help_icon_path = 'images\\help-icon.gif'
+help_icon_path = 'images\\print-icon.gif'
 about_icon_path = 'images\\info-icon.gif'
+README_path = 'README'
 
 #################################################################
 ## WINDOW STUFF
@@ -117,7 +140,7 @@ upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
 save_output_button.grid(row=7, column=0, padx=12, pady=(20, 0), sticky='E')
 display_output_button.grid(row=7, column=1, pady=(20, 0), sticky='W')
 print_button.grid(row=8, column=0, columnspan=2, pady=(10, 0))
-about_button.grid(row=9, column=1, columnspan=2, padx=(0,12), sticky='E')
+about_button.grid(row=9, column=1, columnspan=2, padx=(0, 12), sticky='E')
 help_button.grid(row=9, column=2, columnspan=2, sticky='W')
 
 # Make the window persistent
