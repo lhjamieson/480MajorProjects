@@ -17,6 +17,13 @@ def save_output():
                                     filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
     name.write("hewwo?")
 
+def info_callback():
+    print('info button was successfully pressed')
+
+def help_callback():
+    print('help button was successfully pressed')
+
+
 
 #################################################################
 ## SOME VARIABLES
@@ -26,6 +33,9 @@ def save_output():
 smcm_blue = '#1d285a'
 logo_path = "images\\college-logo.gif"
 print_icon_path = 'images\\print-icon.gif'
+help_icon_path = 'images\\print-icon.gif'
+about_icon_path = 'images\\info-icon.gif'
+
 
 #################################################################
 ## WINDOW STUFF
@@ -52,6 +62,10 @@ print_icon = tk.PhotoImage(
     file=print_icon_path)
 print_icon = print_icon.subsample(100, 100)
 
+about_icon = tk.PhotoImage(
+    file=about_icon_path)
+about_icon = about_icon.subsample(100,100)
+
 # Separator that goes under the title
 sep = Separator(root, orient='horizontal')
 
@@ -67,6 +81,8 @@ text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white')
 text_2_str = "Upload finals schedule .csv file:"
 text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white')
 
+
+
 # Upload buttons
 upload_cschedule_button = tk.Button(root, text='Browse...', command=callback)
 
@@ -78,6 +94,10 @@ save_output_button = tk.Button(root, text='Save Output...', command=save_output)
 display_output_button = tk.Button(root, text='Display Output...', command=callback)
 
 print_button = tk.Button(root, image=print_icon, width=25, height=25, command=callback)
+
+about_button = tk.Button(root, image=about_icon, width=25, height=25, command=callback)
+
+
 
 ################################
 # Put all the widgets into the window with a whole bunch of formatting
@@ -93,6 +113,7 @@ upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
 save_output_button.grid(row=7, column=0, padx=12, pady=(20, 0), sticky='E')
 display_output_button.grid(row=7, column=1, pady=(20, 0), sticky='W')
 print_button.grid(row=8, column=0, columnspan=2, pady=(10, 0))
+about_button.grid(row=9, column=1, columnspan=2, pady=(10, 0), sticky='E')
 
 # Make the window persistent
 root.mainloop()
