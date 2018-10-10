@@ -44,7 +44,7 @@ about_icon_path = 'images\\info-icon.gif'
 
 # Window formatting
 root = tk.Tk()  # The window object
-root.geometry("300x400")
+root.geometry("300x410")
 root.resizable(False, False)
 root.title("SMCM Exam Scheduler")
 root['padx'] = 30
@@ -58,13 +58,14 @@ logo = logo.subsample(2, 2)
 logo_widget = tk.Label(root, image=logo, bg='white')
 
 # Print icon formatting
-print_icon = tk.PhotoImage(
-    file=print_icon_path)
+print_icon = tk.PhotoImage(file=print_icon_path)
 print_icon = print_icon.subsample(100, 100)
 
-about_icon = tk.PhotoImage(
-    file=about_icon_path)
-about_icon = about_icon.subsample(100,100)
+about_icon = tk.PhotoImage(file=about_icon_path)
+about_icon = about_icon.subsample(15, 15)
+
+help_icon = tk.PhotoImage(file=help_icon_path)
+help_icon = help_icon.subsample(100, 100)
 
 # Separator that goes under the title
 sep = Separator(root, orient='horizontal')
@@ -95,7 +96,9 @@ display_output_button = tk.Button(root, text='Display Output...', command=callba
 
 print_button = tk.Button(root, image=print_icon, width=25, height=25, command=callback)
 
-about_button = tk.Button(root, image=about_icon, width=25, height=25, command=callback)
+about_button = tk.Button(root, image=about_icon, width=25, height=25, command=info_callback())
+
+help_button = tk.Button(root, image=help_icon, width=25, height=25, command=help_callback())
 
 
 
@@ -113,7 +116,8 @@ upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
 save_output_button.grid(row=7, column=0, padx=12, pady=(20, 0), sticky='E')
 display_output_button.grid(row=7, column=1, pady=(20, 0), sticky='W')
 print_button.grid(row=8, column=0, columnspan=2, pady=(10, 0))
-about_button.grid(row=9, column=1, columnspan=2, pady=(10, 0), sticky='E')
+about_button.grid(row=9, column=1, columnspan=2, sticky='E')
+help_button.grid(row=9, column=1, columnspan=2, padx=(0, 31), sticky='E')
 
 # Make the window persistent
 root.mainloop()
