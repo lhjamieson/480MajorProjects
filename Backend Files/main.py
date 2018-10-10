@@ -81,3 +81,18 @@ for x in range(len(dfes.index)):
     ExamScheduleMatrix[x][1] = dirtyESM[x][3]
     ExamScheduleMatrix[x][2] = dirtyESM[x][4]
     print(ExamScheduleMatrix[x][0], ExamScheduleMatrix[x][1], ExamScheduleMatrix[x][2])
+
+    
+# Assign dates, put into output file
+
+T = []
+T.append(["M-----",	800, "12/10/18",900,1115])
+T.append(["--W---",	800,"12/10/18",900,	1115])
+
+
+
+def ConvertTime (i):
+    temp = (str)(i)
+    return temp[:1] + ":" + temp[1:]
+
+print(ConvertTime(900))    
