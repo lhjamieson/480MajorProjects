@@ -74,7 +74,7 @@ README_path = 'README'
 # Window formatting
 root = tk.Tk()  # The window object
 root.geometry("300x395")
-root.resizable(False, False)
+root.resizable(False, True)
 root.title("SMCM Exam Scheduler")
 root['padx'] = 30
 root['pady'] = 30
