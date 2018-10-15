@@ -34,7 +34,8 @@ w, h = len(dfcl.columns), len(dfcl.index);
 CourseListMatrix = [[0 for x in range(w)] for y in range(h)]
 
 # starting with header row because we know that data
-CourseListMatrix[0] = [['Course Number'], ['Course Title'], ['Section Number'], ['Class Meeting Time'], ['Class Meeting Days'], ['Building Code'], ['Room Number']]
+CourseListMatrix[0] = [['Course Number'], ['Course Title'], ['Section Number'], ['Class Meeting Time'],
+                       ['Class Meeting Days'], ['Building Code'], ['Room Number']]
 
 # now have to iterate through the dirty matrix on proper columns to fill CourseListMatrix
 for x in range(len(dfcl.index)):
@@ -45,7 +46,8 @@ for x in range(len(dfcl.index)):
     CourseListMatrix[x][4] = dirtyCLM[x][13]  # Class Meeting Days
     CourseListMatrix[x][5] = dirtyCLM[x][14]  # Building Code
     CourseListMatrix[x][6] = dirtyCLM[x][15]  # Room number
-    print(CourseListMatrix[x][0], CourseListMatrix[x][1], CourseListMatrix[x][2], CourseListMatrix[x][3], CourseListMatrix[x][4], CourseListMatrix[x][5], CourseListMatrix[x][6])
+    print(CourseListMatrix[x][0], CourseListMatrix[x][1], CourseListMatrix[x][2], CourseListMatrix[x][3],
+          CourseListMatrix[x][4], CourseListMatrix[x][5], CourseListMatrix[x][6])
 print()
 print()
 print()
@@ -54,7 +56,8 @@ dirtyESM = dfes.as_matrix(columns=None)
 w, h = len(dfes.columns), len(dfes.index);
 
 ExamScheduleMatrix = [[0 for x in range(w)] for y in range(h)]
-ExamScheduleMatrix[0] = [['Course Meeting Time'], ['Course Meeting Days'], ['Exam Date'], ['Exam Begin Time'], ['Exam End Time']]
+ExamScheduleMatrix[0] = [['Course Meeting Time'], ['Course Meeting Days'], ['Exam Date'], ['Exam Begin Time'],
+                         ['Exam End Time']]
 # not sure why the column titles are overwritten on es iterations but not cl iterations ¯\_(ツ)_/¯
 # for now just hard coding a print of the first row before it gets overwritten by for loop
 # print(CourseListMatrix[0])
@@ -65,5 +68,28 @@ for x in range(len(dfes.index)):
     ExamScheduleMatrix[x][2] = dirtyESM[x][2]  # Exam date
     ExamScheduleMatrix[x][3] = dirtyESM[x][3]  # Exam start time
     ExamScheduleMatrix[x][4] = dirtyESM[x][4]  # Exam end date
-    print(ExamScheduleMatrix[x])
+    print(ExamScheduleMatrix[x])  # print for debugging
 
+# TODO: Create function to assign courses to exam times
+# function will take in the CourseScheduleMatrix(CSM) and ExamScheduleMatrix(ESM)
+# function will output a correctly formatted list of the courses and their assigned final exam times & dates
+def exam_assignment(CSM, ESM):
+# function can be split into 3 parts
+# parts 1 and 2 will be inside of a for loop:
+# for each course in course list:
+#
+# PART 1:
+# get course meeting days and time
+# based on a course's meeting days and time, assign it to the matching exam time and date
+
+# PART 2:
+# copy over Course Number, Course Title, Section number
+# assign exam rooms and buildings based on course meeting room and building
+# check to make sure the room is not already taken
+# handle room reassignment if necessary
+
+# PART 3:
+# once for loop is finished
+# check formatting
+# output final list with courses and final exam assignments
+# output needs: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
