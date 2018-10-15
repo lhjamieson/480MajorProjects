@@ -68,28 +68,43 @@ for x in range(len(dfes.index)):
     ExamScheduleMatrix[x][2] = dirtyESM[x][2]  # Exam date
     ExamScheduleMatrix[x][3] = dirtyESM[x][3]  # Exam start time
     ExamScheduleMatrix[x][4] = dirtyESM[x][4]  # Exam end date
-    print(ExamScheduleMatrix[x])  # print for debugging
+    print(ExamScheduleMatrix[x][0])  # print for debugging
+
 
 # TODO: Create function to assign courses to exam times
 # function will take in the CourseScheduleMatrix(CSM) and ExamScheduleMatrix(ESM)
 # function will output a correctly formatted list of the courses and their assigned final exam times & dates
 def exam_assignment(CSM, ESM):
-# function can be split into 3 parts
-# parts 1 and 2 will be inside of a for loop:
-# for each course in course list:
-#
-# PART 1:
-# get course meeting days and time
-# based on a course's meeting days and time, assign it to the matching exam time and date
+    # function can be split into 3 parts
+    # parts 1 and 2 will be inside of a for loop:\
 
-# PART 2:
-# copy over Course Number, Course Title, Section number
-# assign exam rooms and buildings based on course meeting room and building
-# check to make sure the room is not already taken
-# handle room reassignment if necessary
+    temp_output = [[0 for i in range(8)] for j in range(len(CSM))]
 
-# PART 3:
-# once for loop is finished
-# check formatting
-# output final list with courses and final exam assignments
-# output needs: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
+    for x in range(len(CSM)):  # for each course in course list:
+        # PART 1: Harrison
+        # get course meeting days and time
+        # based on a course's meeting days and time, assign it to the matching exam time and date
+        # CSM[x][4] Course meeting days
+        # CSM[x][3] Course start time
+        # ESM[x][0] Exam course  meeting days
+        # ESM[x][1] Exam course start time
+        for y in range(len(ESM)):
+            if CSM[x][4] == ESM[y][0] and CSM[x][3] == ESM[y][1]:
+                temp_output[x][5] = ESM[y][2]  # exam date
+                temp_output[x][6] = ESM[y][3]  # exam start time
+                temp_output[x][7] = ESM[y][4]  # exam end time
+
+    # PART 2: Sinclair
+    # copy over Course Number, Course Title, Section number
+    # assign exam rooms and buildings based on course meeting room and building
+    # handle room reassignment if necessary
+
+    # PART 3:
+    # once for loop is finished
+    # check formatting
+    # output final list with courses and final exam assignments
+    # output needs: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
+    return temp_output[0]
+
+
+print(exam_assignment(CourseListMatrix, ExamScheduleMatrix))
