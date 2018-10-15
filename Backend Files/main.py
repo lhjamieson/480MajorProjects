@@ -66,3 +66,4 @@ for x in range(len(dfes.index)):
     ExamScheduleMatrix[x][3] = dirtyESM[x][3]  # Exam start time
     ExamScheduleMatrix[x][4] = dirtyESM[x][4]  # Exam end date
     print(ExamScheduleMatrix[x])
+
