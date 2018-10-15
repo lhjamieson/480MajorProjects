@@ -61,8 +61,9 @@ def help_callback():
 smcm_blue = '#1d285a'
 logo_path = "images\\college-logo.gif"
 print_icon_path = 'images\\print-icon.gif'
-help_icon_path = 'images\\print-icon.gif'
+help_icon_path = 'images\\help-icon.gif'
 about_icon_path = 'images\\info-icon.gif'
+seahawk_icon_path = 'images\\seahawk-icon.ico'
 README_path = 'README'
 
 #################################################################
@@ -78,6 +79,7 @@ root.title("SMCM Exam Scheduler")
 root['padx'] = 30
 root['pady'] = 30
 root.configure(bg='white')
+root.iconbitmap(seahawk_icon_path)
 
 # Logo formatting
 logo = tk.PhotoImage(
@@ -93,7 +95,7 @@ about_icon = tk.PhotoImage(file=about_icon_path)
 about_icon = about_icon.subsample(18, 18)
 
 help_icon = tk.PhotoImage(file=help_icon_path)
-help_icon = help_icon.subsample(33,33)
+help_icon = help_icon.subsample(35, 35)
 
 # Separator that goes under the title
 sep = Separator(root, orient='horizontal')
