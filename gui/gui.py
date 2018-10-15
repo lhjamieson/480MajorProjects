@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter.ttk import Separator
-
+print('test')
 
 # For test purposes
 def empty_button():
