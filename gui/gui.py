@@ -93,7 +93,7 @@ about_icon = tk.PhotoImage(file=about_icon_path)
 about_icon = about_icon.subsample(18, 18)
 
 help_icon = tk.PhotoImage(file=help_icon_path)
-help_icon = help_icon.subsample(110, 110)
+help_icon = help_icon.subsample(33,33)
 
 # Separator that goes under the title
 sep = Separator(root, orient='horizontal')
