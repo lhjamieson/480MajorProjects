@@ -73,11 +73,12 @@ README_path = 'README'
 
 # Window formatting
 root = tk.Tk()  # The window object
-root.geometry("300x395")
-root.resizable(False, True)
+screenWidth = root.winfo_screenwidth()
+print(screenWidth)
+# root.geometry("300x395") # Leaving this out makes the window resize itself
 root.title("SMCM Exam Scheduler")
-root['padx'] = 30
-root['pady'] = 30
+root['padx'] = 20
+root['pady'] = 20
 root.configure(bg='white')
 root.iconbitmap(seahawk_icon_path)
 
@@ -124,9 +125,11 @@ display_output_button = tk.Button(root, text='Display Output...', command=empty_
 
 print_button = tk.Button(root, image=print_icon, width=25, height=25, command=empty_button)
 
-about_button = tk.Button(root, image=about_icon, width=15, height=15, command=info_callback)
+info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
-help_button = tk.Button(root, image=help_icon, width=15, height=15, command=help_callback)
+about_button = tk.Button(info_buttons_frame, image=about_icon, width=15, height=15, command=info_callback)
+
+help_button = tk.Button(info_buttons_frame, image=help_icon, width=15, height=15, command=help_callback)
 
 ################################
 # Put all the widgets into the window with a whole bunch of formatting
@@ -142,8 +145,15 @@ upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
 save_output_button.grid(row=7, column=0, padx=12, pady=(20, 0), sticky='E')
 display_output_button.grid(row=7, column=1, pady=(20, 0), sticky='W')
 print_button.grid(row=8, column=0, columnspan=2, pady=(10, 0))
-about_button.grid(row=9, column=1, columnspan=2, padx=(0, 12), sticky='E')
-help_button.grid(row=9, column=2, columnspan=2, sticky='W')
+info_buttons_frame.grid(row=9, column=1, sticky="E")
+
+# These automatically pack into info_buttons_frame frame.
+about_button.pack(side="left")
+help_button.pack(side="right")
+
+# about_button.grid(row=9, column=1, columnspan=2, padx=(0, 12), sticky='E')
+# help_button.grid(row=9, column=2, columnspan=2, sticky='W')
+# root.rowconfigure(7, weight=2, minsize=45) //this is the stuff for moving buttons around when the window is resized
 
 # Make the window persistent
 root.mainloop()
