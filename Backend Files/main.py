@@ -4,6 +4,7 @@
 # else:
 #   CourseListMatrix[x][6] = dirtyCLM[x][15]
 # TODO figure out why column titles on the es iteration are overwritten
+# TODO remove courses without finals from input
 
 # import pandas a powerful data science module for python
 import pandas as pd
@@ -43,7 +44,7 @@ for x in range(len(dfcl.index)):
     CourseListMatrix[x][1] = dirtyCLM[x][1]  # Course title
     CourseListMatrix[x][2] = dirtyCLM[x][5]  # Course Number
     CourseListMatrix[x][3] = dirtyCLM[x][9]  # Class Meeting Time
-    CourseListMatrix[x][4] = dirtyCLM[x][13]  # Class Meeting Days
+    CourseListMatrix[x][4] = dirtyCLM[x][13]  # Class Meeting Days; TODO: truncate righmost character
     CourseListMatrix[x][5] = dirtyCLM[x][14]  # Building Code
     CourseListMatrix[x][6] = dirtyCLM[x][15]  # Room number
     print(CourseListMatrix[x][0], CourseListMatrix[x][1], CourseListMatrix[x][2], CourseListMatrix[x][3],
@@ -68,7 +69,7 @@ for x in range(len(dfes.index)):
     ExamScheduleMatrix[x][2] = dirtyESM[x][2]  # Exam date
     ExamScheduleMatrix[x][3] = dirtyESM[x][3]  # Exam start time
     ExamScheduleMatrix[x][4] = dirtyESM[x][4]  # Exam end date
-    print(ExamScheduleMatrix[x][0])  # print for debugging
+    # print(ExamScheduleMatrix[x][0])  # print for debugging
 
 
 # TODO: Create function to assign courses to exam times
@@ -76,7 +77,7 @@ for x in range(len(dfes.index)):
 # function will output a correctly formatted list of the courses and their assigned final exam times & dates
 def exam_assignment(CSM, ESM):
     # function can be split into 3 parts
-    # parts 1 and 2 will be inside of a for loop:\
+    # parts 1 and 2 will be inside of a for loop:
 
     temp_output = [[0 for i in range(8)] for j in range(len(CSM))]
 
@@ -84,11 +85,21 @@ def exam_assignment(CSM, ESM):
         # PART 1: Harrison
         # get course meeting days and time
         # based on a course's meeting days and time, assign it to the matching exam time and date
-        # CSM[x][4] Course meeting days
+        # CSM[x][4] Course meeting days; course meeting days has 7 slots,
         # CSM[x][3] Course start time
-        # ESM[x][0] Exam course  meeting days
+        # ESM[x][0] Exam course meeting days; exam course meeting days has 6
         # ESM[x][1] Exam course start time
-        for y in range(len(ESM)):
+
+        # if the 4th index in CSM is a string, remove the first character
+        # This is because the meeting days in CSM and ESM are different length
+        # CSM is 7 characters and starts with Sunday, while ESM is 6 characters and starts with Monday
+        if isinstance(CSM[x][4], str):
+            # remove first character in string
+            CSM[x][4] = CSM[x][4][1:7]
+
+        for y in range(len(ESM)):  # for each exam time in exam schedule
+            # if course meeting days match exam schedule course meeting days,
+            # and Course start time match exam schedule course start time
             if CSM[x][4] == ESM[y][0] and CSM[x][3] == ESM[y][1]:
                 temp_output[x][5] = ESM[y][2]  # exam date
                 temp_output[x][6] = ESM[y][3]  # exam start time
@@ -104,7 +115,7 @@ def exam_assignment(CSM, ESM):
     # check formatting
     # output final list with courses and final exam assignments
     # output needs: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
-    return temp_output[0]
+    return temp_output
 
 
 print(exam_assignment(CourseListMatrix, ExamScheduleMatrix))
