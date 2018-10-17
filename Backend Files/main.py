@@ -74,6 +74,7 @@ for x in range(len(dfes.index)):
 # function will take in the CourseScheduleMatrix(CSM) and ExamScheduleMatrix(ESM)
 # function will output a correctly formatted list of the courses and their assigned final exam times & dates
 def exam_assignment(CSM, ESM):
+
 # function can be split into 3 parts
 # parts 1 and 2 will be inside of a for loop:
 # for each course in course list:

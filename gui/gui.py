@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter.ttk import Separator
-print('test')
 
 # For test purposes
 def empty_button():
@@ -18,9 +17,16 @@ def upload_callback():
 # This is going to open a file browser
 # and the user will specify where they want the output to be saved to.
 def save_output():
+    #Time to shine
+    print("test")
     name = filedialog.asksaveasfile(mode='w', title='Save output',
                                     filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
+    #name is the file path to use for outputting?
     name.write("hewwo?")
+    #transfer the matrix to a DataFrame if not one already
+    #Convert the DataFrame to a CSV file in the file directory
+    ##df.to_csv('hi_there.csv',index=False,header=dataColumns)
+
 
 
 # Called when info button is pressed
