@@ -44,7 +44,7 @@ for x in range(len(dfcl.index)):
     CourseListMatrix[x][1] = dirtyCLM[x][1]  # Course title
     CourseListMatrix[x][2] = dirtyCLM[x][5]  # Course Number
     CourseListMatrix[x][3] = dirtyCLM[x][9]  # Class Meeting Time
-    CourseListMatrix[x][4] = dirtyCLM[x][13]  # Class Meeting Days; TODO: truncate righmost character
+    CourseListMatrix[x][4] = dirtyCLM[x][13]  # Class Meeting Days;
     CourseListMatrix[x][5] = dirtyCLM[x][14]  # Building Code
     CourseListMatrix[x][6] = dirtyCLM[x][15]  # Room number
     print(CourseListMatrix[x][0], CourseListMatrix[x][1], CourseListMatrix[x][2], CourseListMatrix[x][3],
