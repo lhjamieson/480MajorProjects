@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog, ttk
-#from tkinter.ttk import Separator
+
+
+# from tkinter.ttk import Separator
 
 
 # For test purposes
@@ -11,7 +13,7 @@ def empty_button():
 # Used by upload buttons to open a file browser
 def upload_callback():
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
-                                   filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
+                                   filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
     print(name2.read())
 
 
@@ -19,7 +21,7 @@ def upload_callback():
 # and the user will specify where they want the output to be saved to.
 def save_output():
     name = filedialog.asksaveasfile(mode='w', title='Save output',
-                                    filetypes=(("CSV files", "*.csv"), ("All files", "*.*")))
+                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
     name.write("hewwo?")
 
 
@@ -29,7 +31,7 @@ def save_output():
 def info_callback():
     popup = tk.Toplevel()
     popup['padx'] = 20
-    #popup['pady'] = 20
+    # popup['pady'] = 20
     popup.configure(bg='white')
     popup.iconbitmap(seahawk_icon_path)
     popup.wm_title("Information")
@@ -57,7 +59,6 @@ def info_callback():
 def help_callback():
     popup = tk.Toplevel()
     popup['padx'] = 20
-    # popup['pady'] = 20
     popup.configure(bg='white')
     popup.iconbitmap(seahawk_icon_path)
     popup.wm_title("Help")
@@ -66,17 +67,25 @@ def help_callback():
     f = open(README_path, 'r')
     lines = f.readlines()
     HELP_flag = False
+    messages = []
     for line in lines:
         if line.__contains__('HELP'):
             HELP_flag = True
         if HELP_flag and not line.__contains__('===='):
             popup_text += line
-    f.close()
-    popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
+            if line.__contains__(':'):
+                messages.append(tk.Message(popup, text=line, width=300, anchor='center', bg='white', font=('calibri', 10, 'bold'), bd=-7))
+            else:
+                messages.append(tk.Message(popup, text=line, width=300, anchor='center', bg='white', bd=-5))
 
-    popup_message.grid()
+    f.close()
+    # popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
+
+    # popup_message.grid()
+    for m in messages:
+        m.grid(sticky='w')
     button1 = tk.Button(popup, text="Close", command=popup.destroy)
-    button1.grid(pady=(0, 20))
+    button1.grid(pady=(20, 20))
     popup.mainloop()
 
 
@@ -139,7 +148,8 @@ text_2_str = "Upload finals schedule .csv file:"
 text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
 
 # Upload buttons
-upload_cschedule_button = tk.Button(root, text='Browse...', command=upload_callback) # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
+upload_cschedule_button = tk.Button(root, text='Browse...',
+                                    command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
 
 upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback)
 
