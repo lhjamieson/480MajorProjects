@@ -14,10 +14,17 @@ Members:
 
 ===============HELP================
 
-Course List Browse Button: Allows the user to browse the computer's directory for the course list
-Final Schedule Browse Button: Allows the user to browse the computer's directory for the finals schedule list
-Save Output Button: Allows the user to choose a directory where to save the output to, and then save the output of the program.
-Display Output Button: Opens and displays the output of the program without saving it to show user the output.
-Print Icon: Allows the user to send the output to a printer and print the output.
-Help Button: Opens up a help window that describes how to use the program.
-About Button: Opens up a window that shows who created the program and when it was created.
+Course List Browse Button:
+    Allows the user to browse the computer's directory for the course list
+Final Schedule Browse Button:
+    Allows the user to browse the computer's directory for the finals schedule list
+Save Output Button:
+    Allows the user to choose a directory where to save the output to, and then save the output of the program.
+Display Output Button:
+    Opens and displays the output of the program without saving it to show user the output.
+Print Icon:
+    Allows the user to send the output to a printer and print the output.
+Help Button:
+    Opens up a help window that describes how to use the program.
+About Button:
+    Opens up a window that shows who created the program and when it was created.

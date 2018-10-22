@@ -29,7 +29,7 @@ def save_output():
 def info_callback():
     popup = tk.Toplevel()
     popup['padx'] = 20
-    popup['pady'] = 20
+    #popup['pady'] = 20
     popup.configure(bg='white')
     popup.iconbitmap(seahawk_icon_path)
     popup.wm_title("Information")
@@ -46,8 +46,8 @@ def info_callback():
     popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
 
     popup_message.grid()
-    button1 = tk.Button(popup, text="OK", command=popup.destroy)
-    button1.grid()
+    button1 = tk.Button(popup, text="Close", command=popup.destroy)
+    button1.grid(pady=(0, 20))
     popup.mainloop()
 
 
@@ -55,16 +55,29 @@ def info_callback():
 # Prints the HELP section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
 def help_callback():
+    popup = tk.Toplevel()
+    popup['padx'] = 20
+    # popup['pady'] = 20
+    popup.configure(bg='white')
+    popup.iconbitmap(seahawk_icon_path)
+    popup.wm_title("Help")
+
+    popup_text = ""
     f = open(README_path, 'r')
     lines = f.readlines()
     HELP_flag = False
     for line in lines:
         if line.__contains__('HELP'):
             HELP_flag = True
-        if HELP_flag:
-            print(line)
+        if HELP_flag and not line.__contains__('===='):
+            popup_text += line
     f.close()
-    print('help button was successfully pressed')
+    popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
+
+    popup_message.grid()
+    button1 = tk.Button(popup, text="Close", command=popup.destroy)
+    button1.grid(pady=(0, 20))
+    popup.mainloop()
 
 
 #################################################################
@@ -126,7 +139,7 @@ text_2_str = "Upload finals schedule .csv file:"
 text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
 
 # Upload buttons
-upload_cschedule_button = tk.Button(root, text='Browse...', command=upload_callback, relief='flat', bg=smcm_blue, fg='white')
+upload_cschedule_button = tk.Button(root, text='Browse...', command=upload_callback) # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
 
 upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback)
 
