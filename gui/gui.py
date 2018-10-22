@@ -1,6 +1,6 @@
 import tkinter as tk
-from tkinter import filedialog
-from tkinter.ttk import Separator
+from tkinter import filedialog, ttk
+#from tkinter.ttk import Separator
 
 
 # For test purposes
@@ -27,14 +27,28 @@ def save_output():
 # Prints the INFO section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
 def info_callback():
+    popup = tk.Toplevel()
+    popup['padx'] = 20
+    popup['pady'] = 20
+    popup.configure(bg='white')
+    popup.iconbitmap(seahawk_icon_path)
+    popup.wm_title("Information")
+
+    popup_text = ""
     f = open(README_path, 'r')
     lines = f.readlines()
     for line in lines:
-        if line.__contains__('HELP'):
+        if line.__contains__('HELP'):  # stop after reaching the help section
             break
-        print(line)
+        if not line.__contains__('====='):  # so it doesn't include the ===ABOUT=== line in the file.
+            popup_text += line
     f.close()
-    print('info button was successfully pressed')
+    popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
+
+    popup_message.grid()
+    button1 = tk.Button(popup, text="OK", command=popup.destroy)
+    button1.grid()
+    popup.mainloop()
 
 
 # Called when help button is pressed
@@ -73,8 +87,6 @@ README_path = 'README'
 
 # Window formatting
 root = tk.Tk()  # The window object
-screenWidth = root.winfo_screenwidth()
-print(screenWidth)
 # root.geometry("300x395") # Leaving this out makes the window resize itself
 root.title("SMCM Exam Scheduler")
 root['padx'] = 20
@@ -99,7 +111,7 @@ help_icon = tk.PhotoImage(file=help_icon_path)
 help_icon = help_icon.subsample(35, 35)
 
 # Separator that goes under the title
-sep = Separator(root, orient='horizontal')
+sep = ttk.Separator(root, orient='horizontal')
 
 # Define title
 title_text = "Exam Scheduler"
@@ -108,13 +120,13 @@ title.config(font=('calibri', 14), foreground=smcm_blue, bg='white')
 
 # Define the labels for upload buttons
 text_1_str = "Upload course schedule .csv file:"
-text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white')
+text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white', font=('calibri', 10))
 
 text_2_str = "Upload finals schedule .csv file:"
-text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white')
+text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
 
 # Upload buttons
-upload_cschedule_button = tk.Button(root, text='Browse...', command=upload_callback)
+upload_cschedule_button = tk.Button(root, text='Browse...', command=upload_callback, relief='flat', bg=smcm_blue, fg='white')
 
 upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback)
 
@@ -127,7 +139,8 @@ print_button = tk.Button(root, image=print_icon, width=25, height=25, command=em
 
 info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
-about_button = tk.Button(info_buttons_frame, image=about_icon, width=15, height=15, command=info_callback)
+about_button = tk.Button(info_buttons_frame, image=about_icon, width=15, height=15,
+                         command=info_callback)
 
 help_button = tk.Button(info_buttons_frame, image=help_icon, width=15, height=15, command=help_callback)
 
