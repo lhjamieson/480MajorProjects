@@ -2,9 +2,6 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 
 
-# from tkinter.ttk import Separator
-
-
 # For test purposes
 def empty_button():
     print("You pressed that button.")
@@ -25,16 +22,19 @@ def save_output():
     name.write("hewwo?")
 
 
+
+
 # Called when info button is pressed
 # Prints the INFO section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
 def info_callback():
-    popup = tk.Toplevel()
-    popup['padx'] = 20
+    global info_popup  #This must be global so we can check if it's open
+    info_popup = tk.Toplevel()
+    info_popup['padx'] = 20
     # popup['pady'] = 20
-    popup.configure(bg='white')
-    popup.iconbitmap(seahawk_icon_path)
-    popup.wm_title("Information")
+    info_popup.configure(bg='white')
+    info_popup.iconbitmap(seahawk_icon_path)
+    info_popup.wm_title("Information")
 
     popup_text = ""
     f = open(README_path, 'r')
@@ -45,23 +45,43 @@ def info_callback():
         if not line.__contains__('====='):  # so it doesn't include the ===ABOUT=== line in the file.
             popup_text += line
     f.close()
-    popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
+    popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='white')
 
     popup_message.grid()
-    button1 = tk.Button(popup, text="Close", command=popup.destroy)
+    button1 = tk.Button(info_popup, text="Close", command=info_popup.destroy)
     button1.grid(pady=(0, 20))
-    popup.mainloop()
+    info_popup.focus()
+    info_popup.mainloop()
 
+
+def open_popup(pressed):
+    if pressed == 'info':
+        if (info_popup is not None) and info_popup.winfo_exists():
+            # info popup is open
+            info_popup.lift()
+            info_popup.focus()
+        else:
+            # info popup isn't open
+            info_callback()
+    elif pressed == 'help':
+        if (help_popup is not None) and help_popup.winfo_exists():
+            # info help_popup is open
+            help_popup.lift()
+            help_popup.focus()
+        else:
+            # info help_popup isn't open
+            help_callback()
 
 # Called when help button is pressed
 # Prints the HELP section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
 def help_callback():
-    popup = tk.Toplevel()
-    popup['padx'] = 20
-    popup.configure(bg='white')
-    popup.iconbitmap(seahawk_icon_path)
-    popup.wm_title("Help")
+    global help_popup
+    help_popup = tk.Toplevel()
+    help_popup['padx'] = 20
+    help_popup.configure(bg='white')
+    help_popup.iconbitmap(seahawk_icon_path)
+    help_popup.wm_title("Help")
 
     popup_text = ""
     f = open(README_path, 'r')
@@ -74,19 +94,19 @@ def help_callback():
         if HELP_flag and not line.__contains__('===='):
             popup_text += line
             if line.__contains__(':'):
-                messages.append(tk.Message(popup, text=line, width=300, anchor='center', bg='white', font=('calibri', 10, 'bold'), bd=-7))
+                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white', font=('calibri', 10, 'bold'), bd=-7))
             else:
-                messages.append(tk.Message(popup, text=line, width=300, anchor='center', bg='white', bd=-5))
+                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white', bd=-5))
 
     f.close()
-    # popup_message = tk.Message(popup, text=popup_text, width=400, anchor='center', bg='white')
+    # popup_message = tk.Message(help_popup, text=popup_text, width=400, anchor='center', bg='white')
 
     # popup_message.grid()
     for m in messages:
         m.grid(sticky='w')
-    button1 = tk.Button(popup, text="Close", command=popup.destroy)
+    button1 = tk.Button(help_popup, text="Close", command=help_popup.destroy)
     button1.grid(pady=(20, 20))
-    popup.mainloop()
+    help_popup.mainloop()
 
 
 #################################################################
@@ -101,6 +121,9 @@ help_icon_path = 'images\\help-icon.gif'
 about_icon_path = 'images\\info-icon.gif'
 seahawk_icon_path = 'images\\seahawk-icon.ico'
 README_path = 'README'
+info_popup = None  # This is necessary for checking if the window is open
+help_popup = None
+
 
 #################################################################
 ## WINDOW STUFF
@@ -163,9 +186,9 @@ print_button = tk.Button(root, image=print_icon, width=25, height=25, command=em
 info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
 about_button = tk.Button(info_buttons_frame, image=about_icon, width=15, height=15,
-                         command=info_callback)
+                         command=lambda: open_popup('info'))
 
-help_button = tk.Button(info_buttons_frame, image=help_icon, width=15, height=15, command=help_callback)
+help_button = tk.Button(info_buttons_frame, image=help_icon, width=15, height=15, command=lambda: open_popup('help'))
 
 ################################
 # Put all the widgets into the window with a whole bunch of formatting
