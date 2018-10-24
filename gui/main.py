@@ -103,9 +103,7 @@ def CLexcelToMatrix(fa):
     dirtyCLM = dfcl.as_matrix(columns=None)
     w, h = 7, len(dfcl.index)
     CourseListMatrix = [[0 for x in range(w)] for y in range(h)]
-    CourseListMatrix[0] = [['Course Number'], ['Course Title'], ['Section Number'], ['Class Meeting Time'],
-                           ['Class Meeting Days'], ['Building Code'], ['Room Number']]
-    course_location = 1
+    course_location = 0
     for x in range(len(dfcl.index)):
         try:
             ct = dirtyCLM[x][9]
