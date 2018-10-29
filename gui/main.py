@@ -164,48 +164,46 @@ def exam_assignment():
     global CSM
     global ESM
     global output
-    output = []
-    # output = [[0 for i in range(8)] for j in range(len(CSM))]
+    output = [[0 for i in range(8)] for j in range(len(CSM))]
     for x in range(len(CSM)):  # for each course in course list:
-        closest_time = None  # reset the closest exam time for each course
-
-        # CSM[x][4] Course meeting days
+        closest_time = None
+        # get course meeting days and time
+        # based on a course's meeting days and time, assign it to the matching exam time and date
+        # CSM[x][4] Course meeting days; course meeting days has 7 slots,
         # CSM[x][3] Course start time
-        # ESM[x][0] Exam course meeting days
+        # ESM[x][0] Exam course meeting days; exam course meeting days has 6
         # ESM[x][1] Exam course start time
 
+        # if the 4th index in CSM is a string, remove the first character
+        # This is because the meeting days in CSM and ESM are different length
+        # CSM is 7 characters and starts with Sunday, while ESM is 6 characters and starts with Monday
+        # Check if course has a meeting time
         for y in range(len(ESM)):  # for each exam time in exam schedule
             # if course meeting days match exam schedule course meeting days,
-            # and course start time match exam schedule course start time
+            # and Course start time match exam schedule course start time
             if CSM[x][4] == ESM[y][0] and CSM[x][3] == ESM[y][1]:
-                # output[x][0] = CSM[x][0]  # course number
-                # output[x][1] = CSM[x][1]  # course title
-                # output[x][2] = CSM[x][2]  # section number
-                # output[x][3] = CSM[x][5]  # building code
-                # output[x][4] = CSM[x][6]  # room number
-                # output[x][5] = ESM[y][2]  # exam date
-                # output[x][6] = ESM[y][3]  # exam start time
-                # output[x][7] = ESM[y][4]  # exam end time
-                output.append([CSM[x][0], CSM[x][1], CSM[x][2], CSM[x][5], CSM[x][6], ESM[y][2], ESM[y][3], ESM[y][4]])
-                break  # perfect match found, break out of loop
+                output[x][0] = CSM[x][0]  # course number
+                output[x][1] = CSM[x][1]  # course title
+                output[x][2] = CSM[x][2]  # section number
+                output[x][3] = CSM[x][5]  # building code
+                output[x][4] = CSM[x][6]  # room number
+                output[x][5] = ESM[y][2]  # exam date
+                output[x][6] = ESM[y][3]  # exam start time
+                output[x][7] = ESM[y][4]  # exam end time
+                # Start of my solution implementation
+                break  # perfect match found, break out of loop. Part of my solution
             # perfect match hasn't been found yet, find the closest exam time
             elif (closest_time is None or closest_time > (CSM[x][3] - ESM[y][1])) and CSM[x][4] == ESM[y][0]:
-                # new solution tracks the index of ESM which give the closest time
-                # then appends a row with those indexed values if a perfect match is not found after loop has concluded
-                # is this solution be better? It uses 2 more integer variables, but doesnt assign values in each pass
                 closest_time = CSM[x][3] - ESM[y][1]
-                closest_y = y  # index row of exam with the closest time
-                # output[x][0] = CSM[x][0]  # course number
-                # output[x][1] = CSM[x][1]  # course title
-                # output[x][2] = CSM[x][2]  # section number
-                # output[x][3] = CSM[x][5]  # building code
-                # output[x][4] = CSM[x][6]  # room number
-                # output[x][5] = ESM[y][2]  # exam date
-                # output[x][6] = ESM[y][3]  # exam start time
-                # output[x][7] = ESM[y][4]  # exam end time
-            # if a match hasn't been found, append row of course information and exam time of closest normal course time
-            if (y == len(ESM)-1) and closest_time is not None:
-                output.append([CSM[x][0], CSM[x][1], CSM[x][2], CSM[x][5], CSM[x][6], ESM[closest_y][2], ESM[closest_y][3], ESM[closest_y][4]])
+                output[x][0] = CSM[x][0]  # course number
+                output[x][1] = CSM[x][1]  # course title
+                output[x][2] = CSM[x][2]  # section number
+                output[x][3] = CSM[x][5]  # building code
+                output[x][4] = CSM[x][6]  # room number
+                output[x][5] = ESM[y][2]  # exam date
+                output[x][6] = ESM[y][3]  # exam start time
+                output[x][7] = ESM[y][4]  # exam end time
+            # End of my solution implementation
 
     # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
 
