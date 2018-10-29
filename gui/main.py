@@ -107,7 +107,7 @@ def CLexcelToMatrix(fa):
     for x in range(len(dfcl.index)):
         try:
             ct = dirtyCLM[x][9]
-            if(ct > 0):
+            if(ct > 0 and ct != None):
                 ed = dirtyCLM[x][8]
                 end_d = ed.strftime('%Y-%m-%d')
                 end_date = end_d[5:7]
@@ -164,9 +164,9 @@ def exam_assignment():
     global CSM
     global ESM
     global output
-    output_location = 0
     output = [[0 for i in range(8)] for j in range(len(CSM))]
     for x in range(len(CSM)):  # for each course in course list:
+        closest_time = None
         # get course meeting days and time
         # based on a course's meeting days and time, assign it to the matching exam time and date
         # CSM[x][4] Course meeting days; course meeting days has 7 slots,
@@ -177,23 +177,33 @@ def exam_assignment():
         # if the 4th index in CSM is a string, remove the first character
         # This is because the meeting days in CSM and ESM are different length
         # CSM is 7 characters and starts with Sunday, while ESM is 6 characters and starts with Monday
-        if isinstance(CSM[x][4], str):
-            # remove first character in string
-            CSM[x][4] = CSM[x][4][1:7]
         # Check if course has a meeting time
-            for y in range(len(ESM)):  # for each exam time in exam schedule
-                # if course meeting days match exam schedule course meeting days,
-                # and Course start time match exam schedule course start time
-                if CSM[x][4] == ESM[y][0] and CSM[x][3] == ESM[y][1]:
-                    output[output_location][0] = CSM[x][0]  # course number
-                    output[output_location][1] = CSM[x][1]  # course title
-                    output[output_location][2] = CSM[x][2]  # section number
-                    output[output_location][3] = CSM[x][5]  # building code
-                    output[output_location][4] = CSM[x][6]  # room number
-                    output[output_location][5] = ESM[y][2]  # exam date
-                    output[output_location][6] = ESM[y][3]  # exam start time
-                    output[output_location][7] = ESM[y][4]  # exam end time
-                    output_location += 1
+        for y in range(len(ESM)):  # for each exam time in exam schedule
+            # if course meeting days match exam schedule course meeting days,
+            # and Course start time match exam schedule course start time
+            if CSM[x][4] == ESM[y][0] and CSM[x][3] == ESM[y][1]:
+                output[x][0] = CSM[x][0]  # course number
+                output[x][1] = CSM[x][1]  # course title
+                output[x][2] = CSM[x][2]  # section number
+                output[x][3] = CSM[x][5]  # building code
+                output[x][4] = CSM[x][6]  # room number
+                output[x][5] = ESM[y][2]  # exam date
+                output[x][6] = ESM[y][3]  # exam start time
+                output[x][7] = ESM[y][4]  # exam end time
+                # Start of my solution implementation
+                break  # perfect match found, break out of loop. Part of my solution
+            # perfect match hasn't been found yet, find the closest exam time
+            elif (closest_time is None or closest_time > (CSM[x][3] - ESM[y][1])) and CSM[x][4] == ESM[y][0]:
+                closest_time = CSM[x][3] - ESM[y][1]
+                output[x][0] = CSM[x][0]  # course number
+                output[x][1] = CSM[x][1]  # course title
+                output[x][2] = CSM[x][2]  # section number
+                output[x][3] = CSM[x][5]  # building code
+                output[x][4] = CSM[x][6]  # room number
+                output[x][5] = ESM[y][2]  # exam date
+                output[x][6] = ESM[y][3]  # exam start time
+                output[x][7] = ESM[y][4]  # exam end time
+            # End of my solution implementation
 
     # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
 
