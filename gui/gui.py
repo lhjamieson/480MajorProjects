@@ -1,3 +1,10 @@
+#################################################################
+## GUI.PY
+## This file is all about making windows, editing windows, and filling out windows.
+## There are buttons that load, save, do popups, open, and print
+##
+##
+
 import tkinter as tk
 from tkinter import filedialog, ttk
 
@@ -22,8 +29,6 @@ def save_output():
     name.write("hewwo?")
 
 
-
-
 # Called when info button is pressed
 # Prints the INFO section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
@@ -45,15 +50,21 @@ def info_callback():
         if not line.__contains__('====='):  # so it doesn't include the ===ABOUT=== line in the file.
             popup_text += line
     f.close()
+    #msg_width = info_popup.winfo_width() - 40
     popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='white')
 
     popup_message.grid()
     button1 = tk.Button(info_popup, text="Close", command=info_popup.destroy)
     button1.grid(pady=(0, 20))
     info_popup.focus()
+    info_popup.rowconfigure(0, weight=2, minsize=45)
+    info_popup.columnconfigure(0, weight=2, minsize=45)
     info_popup.mainloop()
 
 
+# This function handles a pressed info or help button
+# If the window indicated is open, it brings it to the front and focus
+# If it's not open yet, it creates it. This is to prevent duplicate windows
 def open_popup(pressed):
     if pressed == 'info':
         if (info_popup is not None) and info_popup.winfo_exists():
@@ -65,11 +76,11 @@ def open_popup(pressed):
             info_callback()
     elif pressed == 'help':
         if (help_popup is not None) and help_popup.winfo_exists():
-            # info help_popup is open
+            # help_popup is open
             help_popup.lift()
             help_popup.focus()
         else:
-            # info help_popup isn't open
+            # help_popup isn't open
             help_callback()
 
 # Called when help button is pressed
@@ -212,7 +223,7 @@ help_button.pack(side="right")
 
 # about_button.grid(row=9, column=1, columnspan=2, padx=(0, 12), sticky='E')
 # help_button.grid(row=9, column=2, columnspan=2, sticky='W')
-# root.rowconfigure(7, weight=2, minsize=45) //this is the stuff for moving buttons around when the window is resized
+# root.rowconfigure(7, weight=2, minsize=45) # this is the stuff for moving buttons around when the window is resized
 
 # Make the window persistent
 root.mainloop()
