@@ -5,13 +5,31 @@
 ##
 ##
 
+import tempfile  # won't need this forever
 import tkinter as tk
+import win32api
+import win32print
 from tkinter import filedialog, ttk
+import sys, os
 
 
 # For test purposes
 def empty_button():
     print("You pressed that button.")
+
+
+# Takes output and sends it to a printer. details to come
+def print_callback():
+    filename = tempfile.mktemp(".txt")
+    open(filename, 'w').write('Test!!!')
+    win32api.ShellExecute(
+        0,
+        "print",
+        filename,
+        '/d:"%s"' % win32print.GetDefaultPrinter(),
+        ".",
+        0
+    )
 
 
 # Used by upload buttons to open a file browser
@@ -192,7 +210,7 @@ save_output_button = tk.Button(root, text='Save Output...', command=save_output)
 
 display_output_button = tk.Button(root, text='Display Output...', command=empty_button)
 
-print_button = tk.Button(root, image=print_icon, width=25, height=25, command=empty_button)
+print_button = tk.Button(root, image=print_icon, width=25, height=25, command=print_callback)
 
 info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
