@@ -186,6 +186,7 @@ help_icon = help_icon.subsample(35, 35)
 
 # Separator that goes under the title
 sep = ttk.Separator(root, orient='horizontal')
+sep2 = ttk.Separator(root, orient='horizontal')
 
 # Define title
 title_text = "Exam Scheduler"
@@ -208,7 +209,7 @@ upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callb
 # Output buttons
 save_output_button = tk.Button(root, text='Save Output...', command=save_output)
 
-display_output_button = tk.Button(root, text='Display Output...', command=empty_button)
+display_output_button = tk.Button(root, text='Display/Print Output...', command=empty_button)
 
 print_button = tk.Button(root, image=print_icon, width=25, height=25, command=print_callback)
 
@@ -230,10 +231,11 @@ text_1.grid(row=3, column=0, columnspan=2, padx=0, pady=(20, 5), sticky="W")
 upload_cschedule_button.grid(row=4, column=0, columnspan=2, padx=20)
 text_2.grid(row=5, column=0, columnspan=2, padx=0, pady=(10, 5), sticky='W')
 upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
-save_output_button.grid(row=7, column=0, padx=12, pady=(20, 0), sticky='E')
-display_output_button.grid(row=7, column=1, pady=(20, 0), sticky='W')
-print_button.grid(row=8, column=0, columnspan=2, pady=(10, 0))
-info_buttons_frame.grid(row=9, column=1, sticky="E")
+sep2.grid(row=7, column=0, columnspan=2, pady=(20,0), sticky='ew')
+save_output_button.grid(row=8, column=0, padx=12, pady=(20, 0), sticky='E')
+display_output_button.grid(row=8, column=1, pady=(20, 0), sticky='W')
+# print_button.grid(row=8, column=0, columnspan=2, pady=(10, 0))  # rip :(
+info_buttons_frame.grid(row=10, column=1, pady=(30,0), sticky="E")
 
 # These automatically pack into info_buttons_frame frame.
 about_button.pack(side="left")
