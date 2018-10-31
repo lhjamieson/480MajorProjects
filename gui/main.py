@@ -209,11 +209,13 @@ def exam_assignment():
 
     # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
 
-
-def output_writing(name):
+def output_writing(name):  #Method to convert the matrix to a DataFrame and then output it to a csv file
     global output
+    #Set the column labels
     dataColumns = ['Course Number', 'Course Title', 'Section Number', 'Building Code', 'Room Number', 'Exam Date', 'Exam Start Time', 'Exam End Time']
+    #create the DataFrame based on dataColumns and data
     df = pd.DataFrame(data = output, columns = dataColumns)
+    #Save the file as a CSV to the directory specified in save_output
     df.to_csv(name, index=False, header=dataColumns)
 
 
