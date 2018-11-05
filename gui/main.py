@@ -1,13 +1,14 @@
 # code description: This program takes in an exam schedule file and a course schedule file and outputs a file containing
 #  the course and it's assigned exam period.
 
-# Imports:
-import pandas as pd # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
-import os # os will be used to open the file on the computer
-import re # re will be used to compare strings in course input
+import os  # os will be used to open the file on the computer
+import re  # re will be used to compare strings in course input
 import tkinter as tk
-from tkinter import ttk
 from tkinter import filedialog
+from tkinter import ttk
+
+# Imports:
+import pandas as pd  # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
 
 # Global Variables
 CSM = [[0][0]] # CSM will be used to hold all important information from the course file
