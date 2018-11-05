@@ -1,7 +1,30 @@
 ===============ABOUT===============
 
-QA can fill this out. about the app, about the team
+This program was created by the Fall 2018 COSC 480 Advanced Software Engineering class to assist the St. Mary's College of Maryland Registrar's office in scheduling final exams each semester. The program takes in the course information and exam information for each class and outputs a rotated, assigned final exam schedule for the semester.
+
+Members:
+   - Professor: Dr. Lindsay Jamieson
+   - Project Leader: Toby Duncan '18
+   - Quality Assurance Team: Jennifer Mince '19, Brandon Lund '19, and Christopher Craft '19
+   - Back End Team: Ali Khan '19, Harrison Ratcliffe '19, James Kaufman '19, Sinclair Fuh'19, Mason Baird '19
+   - Front End Team: Dani Diaz '19, Byron Dickerson '19, Andrew '20, Olivia Lyons '19
+
+    Version 1.0 10/17/2018
+
 
 ===============HELP================
 
-How to operate our program
+Course List Browse Button:
+    Allows the user to browse the computer's directory for the course list
+Final Schedule Browse Button:
+    Allows the user to browse the computer's directory for the finals schedule list
+Save Output Button:
+    Allows the user to choose a directory where to save the output to, and then save the output of the program.
+Display Output Button:
+    Opens and displays the output of the program without saving it to show user the output.
+Print Icon:
+    Allows the user to send the output to a printer and print the output.
+Help Button:
+    Opens up a help window that describes how to use the program.
+About Button:
+    Opens up a window that shows who created the program and when it was created.
