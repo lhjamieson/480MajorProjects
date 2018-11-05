@@ -49,8 +49,9 @@ def save_output():
     # This line brings in the global variable name
     global name
     # This line opens up a file browser and lets the user decide where the output file will be saved
-    name = filedialog.asksaveasfile(mode='w', title='Save output',
+    name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
                                     filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+    print(name)
     # This line calls on the exam_assignment method to use CSM and ESM matrixes to create the output data
     exam_assignment()
     # This line calls the output_writing method to output the data to the file location the user selected
