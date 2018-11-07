@@ -1,45 +1,49 @@
 # code description: This program takes in an exam schedule file and a course schedule file and outputs a file containing
 #  the course and it's assigned exam period.
 
-import os  # os will be used to open the file on the computer
-import re  # re will be used to compare strings in course input
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk
 
 # Imports:
 import pandas as pd  # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
+import os  # os will be used to open the file on the computer
+import re  # re will be used to compare strings in course input
+import tkinter as tk  # tkinter is used for making beautiful user interfaces
+from tkinter import filedialog  # used for handling browsing files
+from tkinter import ttk
+
 
 # Global Variables
-CSM = [[0][0]] # CSM will be used to hold all important information from the course file
-ESM = [[0][0]] # ESM will be used to hold all the important information from the exam file
-output = [[0][0]] # output will be used to hold courses and their assigned exam times
-name = "" # name will be used to hold the file location of the output
+CSM = [[0][0]]  # CSM will be used to hold all important information from the course file
+ESM = [[0][0]]  # ESM will be used to hold all the important information from the exam file
+output = [[0][0]]  # output will be used to hold courses and their assigned exam times
+name = ""  # name will be used to hold the file location of the output
+
 
 # Display_output will open up the file on the computer for the user to view
 def display_output():
     # This line brings in the global variable name
     global name
     # This if statement is true when name contains a file location and is not empty
-    if(name != ""):
+    if (name != ""):
         # This line calls treatedSelectedAddress to translate the file location into one that can be used by the program
         treatedName = treatSelectedAddress(name)
         # This line opens the file on the computer
         os.startfile(treatedName)
 
+
 # Used by course upload button to open a file browser
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
-                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+                                   filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
     # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
     CLexcelToMatrix(name2)
+
 
 # Used by exam schedule upload buttons to open a file browser
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
-                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+                                   filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
     # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ESM Matrix
     ESexcelToMatrix(name2)
 
@@ -62,7 +66,7 @@ def save_output():
 # Prints the INFO section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
 def info_callback():
-    global info_popup  #This must be global so we can check if it's open
+    global info_popup  # This must be global so we can check if it's open
     info_popup = tk.Toplevel()
     info_popup['padx'] = 20
     # popup['pady'] = 20
@@ -79,7 +83,7 @@ def info_callback():
         if not line.__contains__('====='):  # so it doesn't include the ===ABOUT=== line in the file.
             popup_text += line
     f.close()
-    #msg_width = info_popup.winfo_width() - 40
+    # msg_width = info_popup.winfo_width() - 40
     popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='white')
 
     popup_message.grid()
@@ -112,6 +116,7 @@ def open_popup(pressed):
             # help_popup isn't open
             help_callback()
 
+
 # Called when help button is pressed
 # Prints the HELP section of the README file
 # Someday, we will make it so this function causes a popup with the info printed onto it
@@ -134,7 +139,8 @@ def help_callback():
         if HELP_flag and not line.__contains__('===='):
             popup_text += line
             if line.__contains__(':'):
-                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white', font=('calibri', 10, 'bold'), bd=-7))
+                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white',
+                                           font=('calibri', 10, 'bold'), bd=-7))
             else:
                 messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white', bd=-5))
 
@@ -147,6 +153,7 @@ def help_callback():
     button1 = tk.Button(help_popup, text="Close", command=help_popup.destroy)
     button1.grid(pady=(20, 20))
     help_popup.mainloop()
+
 
 # The ESexcelToArray method will take in the information from the exam schedule file
 #  and put the data into the ESM matrix
@@ -179,7 +186,7 @@ def CLexcelToMatrix(fa):
             # This variable will be used to check if the course time is not 0 or blank
             ct = dirtyCLM[x][9]
             # This line checks if the course time is not 0 or blank
-            if(ct > 0 and ct != None):
+            if (ct > 0 and ct != None):
                 # This line gets the end date of the course
                 ed = dirtyCLM[x][8]
                 # This line gets the end date as a string in the Year-Month-Day format
@@ -235,11 +242,13 @@ def CLexcelToMatrix(fa):
     # This line sets CSM equal to CourseListMatrix
     CSM = CourseListMatrix
 
+
 # The treatSelectedAddress method takes in a file address and cleans it up so it can be used in Python
 def treatSelectedAddress(fileAddress):
     strFileAddress = fileAddress.name
     strFileAddress = strFileAddress.replace("/", "\\\\")
     return strFileAddress
+
 
 # Method that takes user-provided course and exam schedules, and assigns
 # courses exam times based on provided exam schedule
@@ -289,19 +298,23 @@ def exam_assignment():
                 # output[x][6] = ESM[y][3]  # exam start time
                 # output[x][7] = ESM[y][4]  # exam end time
             # if a match hasn't been found, append row of course information and exam time of closest normal course time
-            if (y == len(ESM)-1) and closest_time is not None:
-                output.append([CSM[x][0], CSM[x][1], CSM[x][2], CSM[x][5], CSM[x][6], ESM[closest_y][2], ESM[closest_y][3], ESM[closest_y][4]])
+            if (y == len(ESM) - 1) and closest_time is not None:
+                output.append(
+                    [CSM[x][0], CSM[x][1], CSM[x][2], CSM[x][5], CSM[x][6], ESM[closest_y][2], ESM[closest_y][3],
+                     ESM[closest_y][4]])
 
     # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
+
 
 # The output_writing method will output the data to the excel file selected by the user
 def output_writing(name):
     # This line brings in the global matrix output
     global output
     # This line defines the headers for the output
-    dataColumns = ['Course Number', 'Course Title', 'Section Number', 'Building Code', 'Room Number', 'Exam Date', 'Exam Start Time', 'Exam End Time']
+    dataColumns = ['Course Number', 'Course Title', 'Section Number', 'Building Code', 'Room Number', 'Exam Date',
+                   'Exam Start Time', 'Exam End Time']
     # This line creates a pandas dataframe with the data and header
-    df = pd.DataFrame(data = output, columns = dataColumns)
+    df = pd.DataFrame(data=output, columns=dataColumns)
     # This line calls the treatSelectedAddress method to clean up the output file location
     treatedName = treatSelectedAddress(name)
     # This line creates a writer to write to the excel file
@@ -349,9 +362,9 @@ def GUI():
     logo = logo.subsample(2, 2)
     logo_widget = tk.Label(root, image=logo, bg='white')
 
-    # Print icon formatting
-    print_icon = tk.PhotoImage(file=print_icon_path)
-    print_icon = print_icon.subsample(100, 100)
+    # Various icon formatting
+    # print_icon = tk.PhotoImage(file=print_icon_path)
+    # print_icon = print_icon.subsample(100, 100)
 
     about_icon = tk.PhotoImage(file=about_icon_path)
     about_icon = about_icon.subsample(18, 18)
@@ -385,7 +398,6 @@ def GUI():
     save_output_button = tk.Button(root, text='Save Output...', command=save_output)
 
     display_output_button = tk.Button(root, text='Display/Print Output...', command=display_output)
-
 
     info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
