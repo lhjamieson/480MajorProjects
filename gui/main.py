@@ -30,7 +30,7 @@ def display_output():
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
-                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
     # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CourseScheduleMatrix Matrix
     CLexcelToMatrix(name2)
 
@@ -38,7 +38,7 @@ def upload_callback():
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
-                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
     # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ExamScheduleMatrix Matrix
     ESexcelToMatrix(name2)
 
@@ -50,7 +50,7 @@ def save_output():
     global name
     # This line opens up a file browser and lets the user decide where the output file will be saved
     name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
-                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
     # This line calls on the exam_assignment method to use CourseScheduleMatrix and ExamScheduleMatrix matrixes to create the output data
     exam_assignment()
     # This line calls the output_writing method to output the data to the file location the user selected
@@ -294,12 +294,18 @@ def output_writing(name):
     df = pd.DataFrame(data = output, columns = dataColumns)
     # This line calls the treatSelectedAddress method to clean up the output file location
     treatedName = treatSelectedAddress(name)
-    # This line creates a writer to write to the excel file
-    writer = pd.ExcelWriter(treatedName, engine='xlsxwriter')
-    # This line puts the information from the dataframe to the excel file
-    df.to_excel(writer, sheet_name='Sheet1', index=False)
-    # This line saves the excel file and closes the writer
-    writer.save()
+
+    l = len(treatedName)
+    if re.match(r'.xlsx', treatedName[l - 5: l]):
+        # This line creates a writer to write to the excel file
+        writer = pd.ExcelWriter(treatedName, engine='xlsxwriter')
+        # This line puts the information from the dataframe to the excel file
+        df.to_excel(writer, sheet_name='Sheet1', index=False)
+        # This line saves the excel file and closes the writer
+        writer.save()
+    else :
+        df.to_csv(treatedName, index=False, header=dataColumns)
+
 
 
 def GUI():
