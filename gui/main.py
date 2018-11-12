@@ -17,6 +17,10 @@ ESM = [[0][0]]  # ESM will be used to hold all the important information from th
 output = [[0][0]]  # output will be used to hold courses and their assigned exam times
 name = ""  # name will be used to hold the file location of the output
 uploaded_file_name_1_str = ''
+uploaded_file_name_2_str = ''
+# These must be global for the sake of enabling/disabling based on if files are uploaded
+save_output_button = 0
+display_output_button = 0
 
 
 # Display_output will open up the file on the computer for the user to view
@@ -36,12 +40,17 @@ def upload_callback():
     # This line opens the file browser for the user to select the course schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
-    # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
 
     # updates the field next to the button to display filename you just uploaded
     global uploaded_file_name_1_str
     uploaded_file_name_1_str.set(name2.name.split('/')[-1])
 
+    # Time to handle disabling/enabling buttons based on what you've uploaded
+    if uploaded_file_name_2_str.get() != '':
+        save_output_button['state'] = 'normal'
+        display_output_button['state'] = 'normal'
+
+    # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
     CLexcelToMatrix(name2)
 
 
@@ -50,6 +59,16 @@ def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+
+    # updates the field next to the button to display filename you just uploaded
+    global uploaded_file_name_2_str
+    uploaded_file_name_2_str.set(name2.name.split('/')[-1])  # so it doesnt show entire path
+
+    # Handle disbling/enabling buttons based on what you've uploaded
+    if uploaded_file_name_1_str.get() != '':
+        save_output_button['state'] = 'normal'
+        display_output_button['state'] = 'normal'
+
     # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ESM Matrix
     ESexcelToMatrix(name2)
 
@@ -396,22 +415,29 @@ def GUI():
 
     # Labels next to upload buttons
     # These indicate what file you uploaded
-    #uploaded_file_name_1_str = ""  # initially blank; will be overwritten when something is uploaded
     global uploaded_file_name_1_str
     uploaded_file_name_1_str = tk.StringVar()
     uploaded_file_name_1_str.set('')
     uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='white', font=('calibri', 10))
 
+    global uploaded_file_name_2_str
+    uploaded_file_name_2_str = tk.StringVar()
+    uploaded_file_name_2_str.set('')
+    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='white',
+                                      font=('calibri', 10))
+
     # Upload buttons
+
     upload_cschedule_button = tk.Button(root, text='Browse...',
                                         command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
 
     upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback2)
 
     # Output buttons
-    save_output_button = tk.Button(root, text='Save Output...', command=save_output)
+    global save_output_button, display_output_button
+    save_output_button = tk.Button(root, text='Save Output...', command=save_output, state='disabled')
 
-    display_output_button = tk.Button(root, text='Display/Print Output...', command=display_output)
+    display_output_button = tk.Button(root, text='Display/Print Output...', command=display_output, state='disabled')
 
     info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
@@ -433,6 +459,7 @@ def GUI():
     uploaded_file_name_1.grid(row=4, column=1, columnspan=2, sticky='E')
     text_2.grid(row=5, column=0, columnspan=2, padx=0, pady=(10, 5), sticky='W')
     upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
+    uploaded_file_name_2.grid(row=6, column=1, columnspan=2, sticky='E')
     sep2.grid(row=7, column=0, columnspan=2, pady=(20, 0), sticky='ew')
     save_output_button.grid(row=8, column=0, padx=12, pady=(20, 0), sticky='E')
     display_output_button.grid(row=8, column=1, pady=(20, 0), sticky='W')
