@@ -16,6 +16,7 @@ CSM = [[0][0]]  # CSM will be used to hold all important information from the co
 ESM = [[0][0]]  # ESM will be used to hold all the important information from the exam file
 output = [[0][0]]  # output will be used to hold courses and their assigned exam times
 name = ""  # name will be used to hold the file location of the output
+uploaded_file_name_1_str = ''
 
 
 # Display_output will open up the file on the computer for the user to view
@@ -36,6 +37,11 @@ def upload_callback():
     name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
     # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
+
+    # updates the field next to the button to display filename you just uploaded
+    global uploaded_file_name_1_str
+    uploaded_file_name_1_str.set(name2.name.split('/')[-1])
+
     CLexcelToMatrix(name2)
 
 
@@ -333,7 +339,7 @@ def GUI():
 
     smcm_blue = '#1d285a'
     logo_path = "images\\college-logo.gif"
-    print_icon_path = 'images\\print-icon.gif'
+    # print_icon_path = 'images\\print-icon.gif'
     help_icon_path = 'images\\help-icon.gif'
     about_icon_path = 'images\\info-icon.gif'
     global seahawk_icon_path, README_path, info_popup, help_popup
@@ -388,6 +394,14 @@ def GUI():
     text_2_str = "Upload finals schedule .csv file:"
     text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
 
+    # Labels next to upload buttons
+    # These indicate what file you uploaded
+    #uploaded_file_name_1_str = ""  # initially blank; will be overwritten when something is uploaded
+    global uploaded_file_name_1_str
+    uploaded_file_name_1_str = tk.StringVar()
+    uploaded_file_name_1_str.set('')
+    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='white', font=('calibri', 10))
+
     # Upload buttons
     upload_cschedule_button = tk.Button(root, text='Browse...',
                                         command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
@@ -416,6 +430,7 @@ def GUI():
     sep.grid(row=2, column=0, columnspan=2, sticky='ew')
     text_1.grid(row=3, column=0, columnspan=2, padx=0, pady=(20, 5), sticky="W")
     upload_cschedule_button.grid(row=4, column=0, columnspan=2, padx=20)
+    uploaded_file_name_1.grid(row=4, column=1, columnspan=2, sticky='E')
     text_2.grid(row=5, column=0, columnspan=2, padx=0, pady=(10, 5), sticky='W')
     upload_fschedule_button.grid(row=6, column=0, columnspan=2, padx=20)
     sep2.grid(row=7, column=0, columnspan=2, pady=(20, 0), sticky='ew')
