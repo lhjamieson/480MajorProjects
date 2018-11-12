@@ -13,48 +13,48 @@ from tkinter import filedialog
 CourseScheduleMatrix = [[0][0]] # CourseScheduleMatrix will be used to hold all important information from the course file
 ExamScheduleMatrix = [[0][0]] # ExamScheduleMatrix will be used to hold all the important information from the exam file
 output = [[0][0]] # output will be used to hold courses and their assigned exam times
-name = "" # name will be used to hold the file location of the output
+file_output_name = "" # file_output_name will be used to hold the file location of the output
 
 # Display_output will open up the file on the computer for the user to view
 def display_output():
-    # This line brings in the global variable name
-    global name
-    # This if statement is true when name contains a file location and is not empty
-    if(name != ""):
+    # This line brings in the global variable file_output_name
+    global file_output_name
+    # This if statement is true when file_output_name contains a file location and is not empty
+    if(file_output_name != ""):
         # This line calls treatedSelectedAddress to translate the file location into one that can be used by the program
-        treatedName = treatSelectedAddress(name)
+        treatedName = treatSelectedAddress(file_output_name)
         # This line opens the file on the computer
         os.startfile(treatedName)
 
 # Used by course upload button to open a file browser
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+    CourseList_Input = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
                                    filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
     # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CourseScheduleMatrix Matrix
-    CLexcelToMatrix(name2)
+    CLexcelToMatrix(CourseList_Input)
 
 # Used by exam schedule upload buttons to open a file browser
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+    ExamSchedule_Input = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
                                    filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
     # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ExamScheduleMatrix Matrix
-    ESexcelToMatrix(name2)
+    ESexcelToMatrix(ExamSchedule_Input)
 
 
 # This is going to open a file browser
 # and the user will specify where they want the output to be saved to.
 def save_output():
-    # This line brings in the global variable name
-    global name
+    # This line brings in the global variable file_output_name
+    global file_output_name
     # This line opens up a file browser and lets the user decide where the output file will be saved
-    name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
+    file_output_name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
                                     filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
     # This line calls on the exam_assignment method to use CourseScheduleMatrix and ExamScheduleMatrix matrixes to create the output data
     exam_assignment()
     # This line calls the output_writing method to output the data to the file location the user selected
-    output_writing(name)
+    output_writing(file_output_name)
 
 
 # Called when info button is pressed
@@ -189,34 +189,7 @@ def CLexcelToMatrix(fa):
                 # if they do, all important information is put into the CourseListMatrix
                 # 0 - Course Number, 1 - Course Title, 2 - Section Title, 3 - Course Start Time, 4 -Course Meeting days
                 # 5 - Building Code, 6 - Room Number
-                if re.match(r'12', end_date):
-                    CourseListMatrix[course_location][0] = dirtyCLM[x][0]
-                    CourseListMatrix[course_location][1] = dirtyCLM[x][1]
-                    CourseListMatrix[course_location][2] = dirtyCLM[x][5]
-                    CourseListMatrix[course_location][3] = dirtyCLM[x][9]
-                    CourseListMatrix[course_location][4] = dirtyCLM[x][13]
-                    CourseListMatrix[course_location][5] = dirtyCLM[x][14]
-                    CourseListMatrix[course_location][6] = dirtyCLM[x][15]
-                    course_location += 1
-                elif re.match(r'11', end_date):
-                    CourseListMatrix[course_location][0] = dirtyCLM[x][0]
-                    CourseListMatrix[course_location][1] = dirtyCLM[x][1]
-                    CourseListMatrix[course_location][2] = dirtyCLM[x][5]
-                    CourseListMatrix[course_location][3] = dirtyCLM[x][9]
-                    CourseListMatrix[course_location][4] = dirtyCLM[x][13]
-                    CourseListMatrix[course_location][5] = dirtyCLM[x][14]
-                    CourseListMatrix[course_location][6] = dirtyCLM[x][15]
-                    course_location += 1
-                elif re.match(r'04', end_date):
-                    CourseListMatrix[course_location][0] = dirtyCLM[x][0]
-                    CourseListMatrix[course_location][1] = dirtyCLM[x][1]
-                    CourseListMatrix[course_location][2] = dirtyCLM[x][5]
-                    CourseListMatrix[course_location][3] = dirtyCLM[x][9]
-                    CourseListMatrix[course_location][4] = dirtyCLM[x][13]
-                    CourseListMatrix[course_location][5] = dirtyCLM[x][14]
-                    CourseListMatrix[course_location][6] = dirtyCLM[x][15]
-                    course_location += 1
-                elif re.match(r'05', end_date):
+                if re.match(r'12', end_date) or re.match(r'11', end_date) or re.match(r'04', end_date) or re.match(r'05', end_date):
                     CourseListMatrix[course_location][0] = dirtyCLM[x][0]
                     CourseListMatrix[course_location][1] = dirtyCLM[x][1]
                     CourseListMatrix[course_location][2] = dirtyCLM[x][5]
@@ -285,7 +258,7 @@ def exam_assignment():
     # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
 
 # The output_writing method will output the data to the excel file selected by the user
-def output_writing(name):
+def output_writing(file_name):
     # This line brings in the global matrix output
     global output
     # This line defines the headers for the output
@@ -293,7 +266,7 @@ def output_writing(name):
     # This line creates a pandas dataframe with the data and header
     df = pd.DataFrame(data = output, columns = dataColumns)
     # This line calls the treatSelectedAddress method to clean up the output file location
-    treatedName = treatSelectedAddress(name)
+    treatedName = treatSelectedAddress(file_name)
 
     l = len(treatedName)
     if re.match(r'.xlsx', treatedName[l - 5: l]):
@@ -305,7 +278,6 @@ def output_writing(name):
         writer.save()
     else :
         df.to_csv(treatedName, index=False, header=dataColumns)
-
 
 
 def GUI():
