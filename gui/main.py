@@ -5,9 +5,11 @@
 import pandas as pd # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
 import os # os will be used to open the file on the computer
 import re # re will be used to compare strings in course input
+import ctypes
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+
 
 # Global Variables
 CourseScheduleMatrix = [[0][0]] # CourseScheduleMatrix will be used to hold all important information from the course file
@@ -25,6 +27,9 @@ def display_output():
         treatedName = treatSelectedAddress(file_output_name)
         # This line opens the file on the computer
         os.startfile(treatedName)
+    else:
+        ctypes.windll.user32.MessageBoxW(0, "Please make sure you save before you attempt to "
+                                            "display the output.", "Error", 1)
 
 # Used by course upload button to open a file browser
 def upload_callback():
@@ -46,15 +51,19 @@ def upload_callback2():
 # This is going to open a file browser
 # and the user will specify where they want the output to be saved to.
 def save_output():
-    # This line brings in the global variable file_output_name
-    global file_output_name
-    # This line opens up a file browser and lets the user decide where the output file will be saved
-    file_output_name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
-                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
-    # This line calls on the exam_assignment method to use CourseScheduleMatrix and ExamScheduleMatrix matrixes to create the output data
-    exam_assignment()
-    # This line calls the output_writing method to output the data to the file location the user selected
-    output_writing(file_output_name)
+    if len(CourseScheduleMatrix) == 1 or len(ExamScheduleMatrix) == 1: #if either matrix is empty
+        ctypes.windll.user32.MessageBoxW(0, "Please make sure you have both files inputted to the program before "
+                                            "you save.", "Error", 1)
+    else:
+        # This line brings in the global variable file_output_name
+        global file_output_name
+        # This line opens up a file browser and lets the user decide where the output file will be saved
+        file_output_name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
+                                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
+        # This line calls on the exam_assignment method to use CourseScheduleMatrix and ExamScheduleMatrix matrixes to create the output data
+        exam_assignment()
+        # This line calls the output_writing method to output the data to the file location the user selected
+        output_writing(file_output_name)
 
 
 # Called when info button is pressed
