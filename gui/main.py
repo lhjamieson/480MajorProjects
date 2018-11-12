@@ -12,7 +12,7 @@ from tkinter import filedialog
 # Global Variables
 CourseScheduleMatrix = [[0][0]] # CourseScheduleMatrix will be used to hold all important information from the course file
 ExamScheduleMatrix = [[0][0]] # ExamScheduleMatrix will be used to hold all the important information from the exam file
-output = [[0][0]] # output will be used to hold courses and their assigned exam times
+output = []  # output will be used to hold courses and their assigned exam times
 name = "" # name will be used to hold the file location of the output
 
 # Display_output will open up the file on the computer for the user to view
@@ -247,7 +247,7 @@ def exam_assignment():
     global CourseScheduleMatrix
     global ExamScheduleMatrix
     global output
-    output = []
+
     for x in range(len(CourseScheduleMatrix)):  # for each course in course list
         closest_time = None  # reset the closest exam time for each course
 
