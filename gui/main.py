@@ -14,7 +14,7 @@ from tkinter import filedialog
 # Global Variables
 CourseScheduleMatrix = [[0][0]] # CourseScheduleMatrix will be used to hold all important information from the course file
 ExamScheduleMatrix = [[0][0]] # ExamScheduleMatrix will be used to hold all the important information from the exam file
-output = [[0][0]] # output will be used to hold courses and their assigned exam times
+output = []  # output will be used to hold courses and their assigned exam time
 file_output_name = "" # file_output_name will be used to hold the file location of the output
 
 # Display_output will open up the file on the computer for the user to view
@@ -222,15 +222,15 @@ def treatSelectedAddress(fileAddress):
     strFileAddress = strFileAddress.replace("/", "\\\\")
     return strFileAddress
 
-# Method that takes user-provided course and exam schedules, and assigns
-# courses exam times based on provided exam schedule
+# Method that takes user-provided course and exam schedules,
+# and assigns courses exam times based on provided exam schedule
 # Output: Matrix containing exam information for every applicable course
 def exam_assignment():
     global CourseScheduleMatrix
     global ExamScheduleMatrix
     global output
-    output = []
-    for x in range(len(CourseScheduleMatrix)):  # for each course in course list
+
+    for x in range(len(CourseScheduleMatrix)):  # for each course in course schedule
         closest_time = None  # reset the closest exam time for each course
 
         # CourseScheduleMatrix[x][4] Course meeting days
@@ -252,10 +252,11 @@ def exam_assignment():
                 # output[x][7] = ExamScheduleMatrix[y][4]  # exam end time
                 output.append([CourseScheduleMatrix[x][0], CourseScheduleMatrix[x][1], CourseScheduleMatrix[x][2], CourseScheduleMatrix[x][5], CourseScheduleMatrix[x][6], ExamScheduleMatrix[y][2], ExamScheduleMatrix[y][3], ExamScheduleMatrix[y][4]])
                 break  # perfect match found, break out of loop
+
             # perfect match hasn't been found yet, find the closest exam time
             elif (closest_time is None or closest_time > (CourseScheduleMatrix[x][3] - ExamScheduleMatrix[y][1])) and CourseScheduleMatrix[x][4] == ExamScheduleMatrix[y][0]:
-                # new solution tracks the index of ExamScheduleMatrix which give the closest time
-                # determine closest time and record its location in the Exam schedule matrix
+                # Determine closest time block for the course and record its index from the Exam schedule matrix
+                # Closest time will be the smallest difference between the course time from CourseScheduleMatrix and the course time from ExamScheduleMatrix
 
                 closest_time = CourseScheduleMatrix[x][3] - ExamScheduleMatrix[y][1]
                 closest_y = y  # row of exam schedule matrix with the closest time
@@ -263,8 +264,6 @@ def exam_assignment():
             # if a match hasn't been found, append row of course information and exam time of closest normal course time
             if (y == len(ExamScheduleMatrix) - 1) and closest_time is not None:
                 output.append([CourseScheduleMatrix[x][0], CourseScheduleMatrix[x][1], CourseScheduleMatrix[x][2], CourseScheduleMatrix[x][5], CourseScheduleMatrix[x][6], ExamScheduleMatrix[closest_y][2], ExamScheduleMatrix[closest_y][3], ExamScheduleMatrix[closest_y][4]])
-
-    # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
 
 # The output_writing method will output the data to the excel file selected by the user
 def output_writing(file_name):
