@@ -3,6 +3,7 @@
 
 
 # Imports:
+import getpass  # Used for making the initial directory when browsing, be the Documents instead of C drive
 import pandas as pd  # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
 import os  # os will be used to open the file on the computer
 import re  # re will be used to compare strings in course input
@@ -38,7 +39,7 @@ def display_output():
 # Used by course upload button to open a file browser
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+    name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(), title='Select a file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
 
     # updates the field next to the button to display filename you just uploaded
@@ -48,7 +49,7 @@ def upload_callback():
     # Time to handle disabling/enabling buttons based on what you've uploaded
     if uploaded_file_name_2_str.get() != '':
         save_output_button['state'] = 'normal'
-        display_output_button['state'] = 'normal'
+        #display_output_button['state'] = 'normal' #This goes in the Save Output button now
 
     # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
     CLexcelToMatrix(name2)
@@ -57,7 +58,7 @@ def upload_callback():
 # Used by exam schedule upload buttons to open a file browser
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+    name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(), title='Select a file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
 
     # updates the field next to the button to display filename you just uploaded
@@ -67,7 +68,7 @@ def upload_callback2():
     # Handle disbling/enabling buttons based on what you've uploaded
     if uploaded_file_name_1_str.get() != '':
         save_output_button['state'] = 'normal'
-        display_output_button['state'] = 'normal'
+        #display_output_button['state'] = 'normal'
 
     # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ESM Matrix
     ESexcelToMatrix(name2)
@@ -81,10 +82,16 @@ def save_output():
     # This line opens up a file browser and lets the user decide where the output file will be saved
     name = filedialog.asksaveasfile(mode='w', title='Save output',
                                     filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+    # Enable 'Display/Save Output...' button once the output has been saved.
+    # If save dialog was opened and closed without saving, display button is not enabled.
+    if name is not None:
+        display_output_button['state'] = 'normal'
     # This line calls on the exam_assignment method to use CSM and ESM matrixes to create the output data
     exam_assignment()
+
     # This line calls the output_writing method to output the data to the file location the user selected
     output_writing(name)
+
 
 
 # Called when info button is pressed
@@ -429,7 +436,7 @@ def GUI():
     # Upload buttons
 
     upload_cschedule_button = tk.Button(root, text='Browse...',
-                                        command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
+                                        command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white')  # This stuff makes her pretty
 
     upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback2)
 
