@@ -29,7 +29,7 @@ def display_output():
     # This line brings in the global variable name
     global name
     # This if statement is true when name contains a file location and is not empty
-    if (name != ""):
+    if name != "":
         # This line calls treatedSelectedAddress to translate the file location into one that can be used by the program
         treatedName = treatSelectedAddress(name)
         # This line opens the file on the computer
@@ -40,7 +40,7 @@ def display_output():
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(),
-                                   title='Select a file',
+                                   title='Upload course list file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
 
     # updates the field next to the button to display filename you just uploaded
@@ -60,7 +60,7 @@ def upload_callback():
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
     name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(),
-                                   title='Select a file',
+                                   title='Upload exam schedule file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
 
     # updates the field next to the button to display filename you just uploaded
@@ -119,9 +119,18 @@ def info_callback():
     # msg_width = info_popup.winfo_width() - 40
     popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='white')
 
-    popup_message.grid()
+    title_message = tk.Message(info_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400, anchor='center', bg='white')
+    title_message.config(font=('calibri', 14), bg='white')
+
+    seperator = ttk.Separator(info_popup, orient='horizontal')
+
     button1 = tk.Button(info_popup, text="Close", command=info_popup.destroy)
-    button1.grid(pady=(0, 20))
+
+    title_message.grid(row=1, sticky='n')
+    seperator.grid(row=2, column=0, columnspan=2, sticky='ew')
+    popup_message.grid(row=3)
+    button1.grid(row=4, pady=(0, 20))
+
     info_popup.focus()
     info_popup.rowconfigure(0, weight=2, minsize=45)
     info_popup.columnconfigure(0, weight=2, minsize=45)
@@ -172,15 +181,24 @@ def help_callback():
         if HELP_flag and not line.__contains__('===='):
             popup_text += line
             if line.__contains__(':'):
-                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white',
+                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='white',
                                            font=('calibri', 10, 'bold'), bd=-7))
             else:
-                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white', bd=-5))
+                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='white', bd=-5))
 
     f.close()
     # popup_message = tk.Message(help_popup, text=popup_text, width=400, anchor='center', bg='white')
 
     # popup_message.grid()
+    title_message = tk.Message(help_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400,
+                               anchor='center', bg='white')
+    title_message.config(font=('calibri', 14), bg='white')
+
+    seperator = ttk.Separator(help_popup, orient='horizontal')
+
+    title_message.grid(row=1, sticky='n')
+    seperator.grid(row=2, column=0, columnspan=2, sticky='ew')
+
     for m in messages:
         m.grid(sticky='w')
     button1 = tk.Button(help_popup, text="Close", command=help_popup.destroy)
@@ -383,7 +401,7 @@ def GUI():
     # Window formatting
     root = tk.Tk()  # The window object
     # root.geometry("300x395") # Leaving this out makes the window resize itself
-    root.title("SMCM Exam Scheduler")
+    root.title("Exam Scheduler")
     root['padx'] = 20
     root['pady'] = 20
     root.configure(bg='white')
@@ -415,10 +433,10 @@ def GUI():
     title.config(font=('calibri', 14), foreground=smcm_blue, bg='white')
 
     # Define the labels for upload buttons
-    text_1_str = "Upload course schedule file:"
+    text_1_str = "Upload Semester Course List:"
     text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white', font=('calibri', 10))
 
-    text_2_str = "Upload finals schedule file:"
+    text_2_str = "Upload Exam Schedule:"
     text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
 
     # Labels next to upload buttons
