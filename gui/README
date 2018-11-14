@@ -7,7 +7,7 @@ Members:
    - Project Leader: Toby Duncan '18
    - Quality Assurance Team: Jennifer Mince '19, Brandon Lund '19, and Christopher Craft '19
    - Back End Team: Ali Khan '20, Harrison Ratcliffe '19, James Kaufman '19, Sinclair Fuh'19, Mason Baird '20
-   - Front End Team: Dani Diaz '19, Byron Dickerson '19, Andrew '20, Olivia Lyons '19
+   - Front End Team: Dani Diaz '19, Byron Dickerson '19, Andrew March '20, Olivia Lyons '19
 
     Version 1.0 10/17/2018
 
@@ -20,10 +20,8 @@ Final Schedule Browse Button:
     Allows the user to browse the computer's directory for the finals schedule list
 Save Output Button:
     Allows the user to choose a directory where to save the output to, and then save the output of the program.
-Display Output Button:
-    Opens and displays the output of the program without saving it to show user the output.
-Print Icon:
-    Allows the user to send the output to a printer and print the output.
+Display/Print Output Button:
+    Opens and displays the output of the program without saving it to show user the output. Output can be printed from Excel.
 Help Button:
     Opens up a help window that describes how to use the program.
 About Button:
