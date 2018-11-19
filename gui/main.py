@@ -378,14 +378,14 @@ def GUI():
     root.title("SMCM Exam Scheduler")
     root['padx'] = 20
     root['pady'] = 20
-    root.configure(bg='white')
+    root.configure(bg='gray95')
     root.iconbitmap(seahawk_icon_path)
 
     # Logo formatting
     logo = tk.PhotoImage(
         file=logo_path)
     logo = logo.subsample(2, 2)
-    logo_widget = tk.Label(root, image=logo, bg='white')
+    logo_widget = tk.Label(root, image=logo, bg='gray95')
 
     # Various icon formatting
     # print_icon = tk.PhotoImage(file=print_icon_path)
@@ -404,34 +404,34 @@ def GUI():
     # Define title
     title_text = "Exam Scheduler"
     title = tk.Message(root, text=title_text, width=400, anchor='center')
-    title.config(font=('calibri', 14), foreground=smcm_blue, bg='white')
+    title.config(font=('calibri', 14), foreground=smcm_blue, bg='gray95')
 
     # Define the labels for upload buttons
-    text_1_str = "Upload course schedule .csv file:"
-    text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white', font=('calibri', 10))
+    text_1_str = "Upload Course Schedule File:"
+    text_1 = tk.Message(root, text=text_1_str, width=1000, bg='gray95', font=('calibri', 10), foreground="#1d285a")
 
-    text_2_str = "Upload finals schedule .csv file:"
-    text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
+    text_2_str = "Upload Finals Schedule File:"
+    text_2 = tk.Message(root, text=text_2_str, width=1000, bg='gray95', font=('calibri', 10), foreground="#1d285a")
 
     # Labels next to upload buttons
     # These indicate what file you uploaded
     global uploaded_file_name_1_str
     uploaded_file_name_1_str = tk.StringVar()
     uploaded_file_name_1_str.set('')
-    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='white', font=('calibri', 10))
+    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='gray95', font=('calibri', 10))
 
     global uploaded_file_name_2_str
     uploaded_file_name_2_str = tk.StringVar()
     uploaded_file_name_2_str.set('')
-    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='white',
+    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='gray95',
                                       font=('calibri', 10))
 
     # Upload buttons
 
-    upload_cschedule_button = tk.Button(root, text='Browse...',
+    upload_cschedule_button = tk.Button(root, text='Browse...', foreground="white", bg='#1d285a',
                                         command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
 
-    upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback2)
+    upload_fschedule_button = tk.Button(root, text='Browse...', foreground="white", bg='#1d285a', command=upload_callback2)
 
     # Output buttons
     global save_output_button, display_output_button
