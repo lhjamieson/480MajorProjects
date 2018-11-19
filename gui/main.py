@@ -3,13 +3,14 @@
 
 
 # Imports:
-import pandas as pd  # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
+import getpass  # Used for making the initial directory when browsing, be the Documents instead of C drive
+import \
+    pandas as pd  # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
 import os  # os will be used to open the file on the computer
 import re  # re will be used to compare strings in course input
 import tkinter as tk  # tkinter is used for making beautiful user interfaces
 from tkinter import filedialog  # used for handling browsing files
 from tkinter import ttk
-
 
 # Global Variables
 CSM = [[0][0]]  # CSM will be used to hold all important information from the course file
@@ -28,7 +29,7 @@ def display_output():
     # This line brings in the global variable name
     global name
     # This if statement is true when name contains a file location and is not empty
-    if (name != ""):
+    if name != "":
         # This line calls treatedSelectedAddress to translate the file location into one that can be used by the program
         treatedName = treatSelectedAddress(name)
         # This line opens the file on the computer
@@ -38,7 +39,8 @@ def display_output():
 # Used by course upload button to open a file browser
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+    name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(),
+                                   title='Upload course list file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
 
     # updates the field next to the button to display filename you just uploaded
@@ -48,7 +50,7 @@ def upload_callback():
     # Time to handle disabling/enabling buttons based on what you've uploaded
     if uploaded_file_name_2_str.get() != '':
         save_output_button['state'] = 'normal'
-        display_output_button['state'] = 'normal'
+        # display_output_button['state'] = 'normal' #This goes in the Save Output button now
 
     # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
     CLexcelToMatrix(name2)
@@ -57,7 +59,8 @@ def upload_callback():
 # Used by exam schedule upload buttons to open a file browser
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+    name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(),
+                                   title='Upload exam schedule file',
                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
 
     # updates the field next to the button to display filename you just uploaded
@@ -67,7 +70,7 @@ def upload_callback2():
     # Handle disbling/enabling buttons based on what you've uploaded
     if uploaded_file_name_1_str.get() != '':
         save_output_button['state'] = 'normal'
-        display_output_button['state'] = 'normal'
+        # display_output_button['state'] = 'normal'
 
     # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ESM Matrix
     ESexcelToMatrix(name2)
@@ -81,8 +84,13 @@ def save_output():
     # This line opens up a file browser and lets the user decide where the output file will be saved
     name = filedialog.asksaveasfile(mode='w', title='Save output',
                                     filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
+    # Enable 'Display/Save Output...' button once the output has been saved.
+    # If save dialog was opened and closed without saving, display button is not enabled.
+    if name is not None:
+        display_output_button['state'] = 'normal'
     # This line calls on the exam_assignment method to use CSM and ESM matrixes to create the output data
     exam_assignment()
+
     # This line calls the output_writing method to output the data to the file location the user selected
     output_writing(name)
 
@@ -111,9 +119,18 @@ def info_callback():
     # msg_width = info_popup.winfo_width() - 40
     popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='white')
 
-    popup_message.grid()
+    title_message = tk.Message(info_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400, anchor='center', bg='white')
+    title_message.config(font=('calibri', 14), bg='white')
+
+    seperator = ttk.Separator(info_popup, orient='horizontal')
+
     button1 = tk.Button(info_popup, text="Close", command=info_popup.destroy)
-    button1.grid(pady=(0, 20))
+
+    title_message.grid(row=1, sticky='n')
+    seperator.grid(row=2, column=0, columnspan=2, sticky='ew')
+    popup_message.grid(row=3)
+    button1.grid(row=4, pady=(0, 20))
+
     info_popup.focus()
     info_popup.rowconfigure(0, weight=2, minsize=45)
     info_popup.columnconfigure(0, weight=2, minsize=45)
@@ -164,15 +181,24 @@ def help_callback():
         if HELP_flag and not line.__contains__('===='):
             popup_text += line
             if line.__contains__(':'):
-                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white',
+                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='white',
                                            font=('calibri', 10, 'bold'), bd=-7))
             else:
-                messages.append(tk.Message(help_popup, text=line, width=300, anchor='center', bg='white', bd=-5))
+                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='white', bd=-5))
 
     f.close()
     # popup_message = tk.Message(help_popup, text=popup_text, width=400, anchor='center', bg='white')
 
     # popup_message.grid()
+    title_message = tk.Message(help_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400,
+                               anchor='center', bg='white')
+    title_message.config(font=('calibri', 14), bg='white')
+
+    seperator = ttk.Separator(help_popup, orient='horizontal')
+
+    title_message.grid(row=1, sticky='n')
+    seperator.grid(row=2, column=0, columnspan=2, sticky='ew')
+
     for m in messages:
         m.grid(sticky='w')
     button1 = tk.Button(help_popup, text="Close", command=help_popup.destroy)
@@ -375,17 +401,17 @@ def GUI():
     # Window formatting
     root = tk.Tk()  # The window object
     # root.geometry("300x395") # Leaving this out makes the window resize itself
-    root.title("SMCM Exam Scheduler")
+    root.title("Exam Scheduler")
     root['padx'] = 20
     root['pady'] = 20
-    root.configure(bg='gray95')
+    root.configure(bg='white')
     root.iconbitmap(seahawk_icon_path)
 
     # Logo formatting
     logo = tk.PhotoImage(
         file=logo_path)
     logo = logo.subsample(2, 2)
-    logo_widget = tk.Label(root, image=logo, bg='gray95')
+    logo_widget = tk.Label(root, image=logo, bg='white')
 
     # Various icon formatting
     # print_icon = tk.PhotoImage(file=print_icon_path)
@@ -404,34 +430,35 @@ def GUI():
     # Define title
     title_text = "Exam Scheduler"
     title = tk.Message(root, text=title_text, width=400, anchor='center')
-    title.config(font=('calibri', 14), foreground=smcm_blue, bg='gray95')
+    title.config(font=('calibri', 14), foreground=smcm_blue, bg='white')
 
     # Define the labels for upload buttons
-    text_1_str = "Upload Course Schedule File:"
-    text_1 = tk.Message(root, text=text_1_str, width=1000, bg='gray95', font=('calibri', 10), foreground="#1d285a")
+    text_1_str = "Upload Semester Course List:"
+    text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white', font=('calibri', 10))
 
-    text_2_str = "Upload Finals Schedule File:"
-    text_2 = tk.Message(root, text=text_2_str, width=1000, bg='gray95', font=('calibri', 10), foreground="#1d285a")
+    text_2_str = "Upload Exam Schedule:"
+    text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
 
     # Labels next to upload buttons
     # These indicate what file you uploaded
     global uploaded_file_name_1_str
     uploaded_file_name_1_str = tk.StringVar()
     uploaded_file_name_1_str.set('')
-    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='gray95', font=('calibri', 10))
+    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='white',
+                                      font=('calibri', 10))
 
     global uploaded_file_name_2_str
     uploaded_file_name_2_str = tk.StringVar()
     uploaded_file_name_2_str.set('')
-    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='gray95',
+    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='white',
                                       font=('calibri', 10))
 
     # Upload buttons
 
-    upload_cschedule_button = tk.Button(root, text='Browse...', foreground="white", bg='#1d285a',
-                                        command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white') #This stuff makes her pretty
+    upload_cschedule_button = tk.Button(root, text='Browse...',
+                                        command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white')  # This stuff makes her pretty
 
-    upload_fschedule_button = tk.Button(root, text='Browse...', foreground="white", bg='#1d285a', command=upload_callback2)
+    upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback2)
 
     # Output buttons
     global save_output_button, display_output_button
