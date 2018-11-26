@@ -103,7 +103,7 @@ def info_callback():
     info_popup = tk.Toplevel()
     info_popup['padx'] = 20
     # popup['pady'] = 20
-    info_popup.configure(bg='white')
+    info_popup.configure(bg='grey95')
     info_popup.iconbitmap(seahawk_icon_path)
     info_popup.wm_title("Information")
 
@@ -117,10 +117,10 @@ def info_callback():
             popup_text += line
     f.close()
     # msg_width = info_popup.winfo_width() - 40
-    popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='white')
+    popup_message = tk.Message(info_popup, text=popup_text, width=400, anchor='center', bg='grey95')
 
-    title_message = tk.Message(info_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400, anchor='center', bg='white')
-    title_message.config(font=('calibri', 14), bg='white')
+    title_message = tk.Message(info_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400, anchor='center', bg='grey95')
+    title_message.config(font=('calibri', 14), bg='grey95')
 
     seperator = ttk.Separator(info_popup, orient='horizontal')
 
@@ -166,7 +166,7 @@ def help_callback():
     global help_popup
     help_popup = tk.Toplevel()
     help_popup['padx'] = 20
-    help_popup.configure(bg='white')
+    help_popup.configure(bg='grey95')
     help_popup.iconbitmap(seahawk_icon_path)
     help_popup.wm_title("Help")
 
@@ -181,18 +181,18 @@ def help_callback():
         if HELP_flag and not line.__contains__('===='):
             popup_text += line
             if line.__contains__(':'):
-                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='white',
+                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='grey95',
                                            font=('calibri', 10, 'bold'), bd=-7))
             else:
-                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='white', bd=-5))
+                messages.append(tk.Message(help_popup, text=line, width=350, anchor='center', bg='grey95', bd=-5))
 
     f.close()
-    # popup_message = tk.Message(help_popup, text=popup_text, width=400, anchor='center', bg='white')
+    # popup_message = tk.Message(help_popup, text=popup_text, width=400, anchor='center', bg='grey95')
 
     # popup_message.grid()
     title_message = tk.Message(help_popup, text="St. Mary's College of Maryland Exam Scheduler", width=400,
-                               anchor='center', bg='white')
-    title_message.config(font=('calibri', 14), bg='white')
+                               anchor='center', bg='grey95')
+    title_message.config(font=('calibri', 14), bg='grey95')
 
     seperator = ttk.Separator(help_popup, orient='horizontal')
 
@@ -405,14 +405,14 @@ def GUI():
     root.title("Exam Scheduler")
     root['padx'] = 20
     root['pady'] = 20
-    root.configure(bg='white')
+    root.configure(bg='grey95')
     root.iconbitmap(seahawk_icon_path)
 
     # Logo formatting
     logo = tk.PhotoImage(
         file=logo_path)
     logo = logo.subsample(2, 2)
-    logo_widget = tk.Label(root, image=logo, bg='white')
+    logo_widget = tk.Label(root, image=logo, bg='grey95')
 
     # Various icon formatting
     # print_icon = tk.PhotoImage(file=print_icon_path)
@@ -431,41 +431,41 @@ def GUI():
     # Define title
     title_text = "Exam Scheduler"
     title = tk.Message(root, text=title_text, width=400, anchor='center')
-    title.config(font=('calibri', 14), foreground=smcm_blue, bg='white')
+    title.config(font=('calibri', 14), foreground=smcm_blue, bg='grey95')
 
     # Define the labels for upload buttons
     text_1_str = "Upload Semester Course List:"
-    text_1 = tk.Message(root, text=text_1_str, width=1000, bg='white', font=('calibri', 10))
+    text_1 = tk.Message(root, text=text_1_str, width=1000, bg='grey95', fg=smcm_blue, font=('calibri', 10))
 
     text_2_str = "Upload Exam Schedule:"
-    text_2 = tk.Message(root, text=text_2_str, width=1000, bg='white', font=('calibri', 10))
+    text_2 = tk.Message(root, text=text_2_str, width=1000, bg='grey95', fg=smcm_blue, font=('calibri', 10))
 
     # Labels next to upload buttons
     # These indicate what file you uploaded
     global uploaded_file_name_1_str
     uploaded_file_name_1_str = tk.StringVar()
     uploaded_file_name_1_str.set('')
-    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='white',
+    uploaded_file_name_1 = tk.Message(root, textvariable=uploaded_file_name_1_str, width=800, bg='grey95',
                                       font=('calibri', 10))
 
     global uploaded_file_name_2_str
     uploaded_file_name_2_str = tk.StringVar()
     uploaded_file_name_2_str.set('')
-    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='white',
+    uploaded_file_name_2 = tk.Message(root, textvariable=uploaded_file_name_2_str, width=800, bg='grey95',
                                       font=('calibri', 10))
 
     # Upload buttons
 
     upload_cschedule_button = tk.Button(root, text='Browse...',
-                                        command=upload_callback)  # , relief='flat', bg=smcm_blue, fg='white')  # This stuff makes her pretty
+                                        command=upload_callback, bg=smcm_blue, fg='white', font=('calibri', 10, 'bold'))  # This stuff makes her pretty
 
-    upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback2)
+    upload_fschedule_button = tk.Button(root, text='Browse...', command=upload_callback2, bg=smcm_blue, fg='white', font=('calibri', 10, 'bold'))  # This stuff makes her pretty
 
     # Output buttons
     global save_output_button, display_output_button
-    save_output_button = tk.Button(root, text='Save Output...', command=save_output, state='disabled')
+    save_output_button = tk.Button(root, text='Save Output...', command=save_output, state='disabled', font=('calibri', 10, 'bold'))
 
-    display_output_button = tk.Button(root, text='Display/Print Output...', command=display_output, state='disabled')
+    display_output_button = tk.Button(root, text='Display/Print Output...', command=display_output, state='disabled', font=('calibri', 10, 'bold'))
 
     info_buttons_frame = tk.Frame(root)  # purely for the aesthetic
 
