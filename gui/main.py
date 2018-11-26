@@ -4,95 +4,101 @@
 
 # Imports:
 import getpass  # Used for making the initial directory when browsing, be the Documents instead of C drive
-import \
-    pandas as pd  # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
-import os  # os will be used to open the file on the computer
-import re  # re will be used to compare strings in course input
-import tkinter as tk  # tkinter is used for making beautiful user interfaces
+import pandas as pd # pandas will be used to handle data conversion from excel file to matrix and then matrix to either excel file or csv
+import os # os will be used to open the file on the computer
+import re # re will be used to compare strings in course input
+import ctypes
+import tkinter as tk
 from tkinter import filedialog  # used for handling browsing files
 from tkinter import ttk
 
+
 # Global Variables
-CSM = [[0][0]]  # CSM will be used to hold all important information from the course file
-ESM = [[0][0]]  # ESM will be used to hold all the important information from the exam file
-output = [[0][0]]  # output will be used to hold courses and their assigned exam times
-name = ""  # name will be used to hold the file location of the output
+CourseScheduleMatrix = [[0][0]] # CourseScheduleMatrix will be used to hold all important information from the course file
+ExamScheduleMatrix = [[0][0]] # ExamScheduleMatrix will be used to hold all the important information from the exam file
+output = []  # output will be used to hold courses and their assigned exam time
+file_output_name = "" # file_output_name will be used to hold the file location of the output
 uploaded_file_name_1_str = ''
 uploaded_file_name_2_str = ''
 # These must be global for the sake of enabling/disabling based on if files are uploaded
 save_output_button = 0
 display_output_button = 0
 
-
 # Display_output will open up the file on the computer for the user to view
 def display_output():
-    # This line brings in the global variable name
-    global name
-    # This if statement is true when name contains a file location and is not empty
-    if name != "":
+    # This line brings in the global variable file_output_name
+    global file_output_name
+    # This if statement is true when file_output_name contains a file location and is not empty
+    if(file_output_name != ""):
         # This line calls treatedSelectedAddress to translate the file location into one that can be used by the program
-        treatedName = treatSelectedAddress(name)
+        treatedName = treatSelectedAddress(file_output_name)
         # This line opens the file on the computer
         os.startfile(treatedName)
+    else:
+        ctypes.windll.user32.MessageBoxW(0, "Please make sure you save before you attempt to "
+                                            "display the output.", "Error", 1)
 
 
 # Used by course upload button to open a file browser
 def upload_callback():
     # This line opens the file browser for the user to select the course schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(),
-                                   title='Upload course list file',
-                                   filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
-
-    # updates the field next to the button to display filename you just uploaded
+    CourseList_Input = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
+  
+   # updates the field next to the button to display filename you just uploaded
     global uploaded_file_name_1_str
-    uploaded_file_name_1_str.set(name2.name.split('/')[-1])
+    uploaded_file_name_1_str.set(CourseList_Input.name.split('/')[-1])
 
     # Time to handle disabling/enabling buttons based on what you've uploaded
     if uploaded_file_name_2_str.get() != '':
         save_output_button['state'] = 'normal'
         # display_output_button['state'] = 'normal' #This goes in the Save Output button now
 
-    # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CSM Matrix
-    CLexcelToMatrix(name2)
+    # This line calls the CLexcelToMatrix method to take in the course input and put the data into the CourseScheduleMatrix Matrix
+    CLexcelToMatrix(CourseList_Input)
 
 
 # Used by exam schedule upload buttons to open a file browser
 def upload_callback2():
     # This line opens the file browser for the user to select the exam schedule
-    name2 = filedialog.askopenfile(mode='rb', initialdir='C:/Users/%s/Documents' % getpass.getuser(),
-                                   title='Upload exam schedule file',
-                                   filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
-
-    # updates the field next to the button to display filename you just uploaded
+    ExamSchedule_Input = filedialog.askopenfile(mode='rb', initialdir='/', title='Select a file',
+                                   filetypes=( ("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
+  
+  # updates the field next to the button to display filename you just uploaded
     global uploaded_file_name_2_str
-    uploaded_file_name_2_str.set(name2.name.split('/')[-1])  # so it doesnt show entire path
+    uploaded_file_name_2_str.set(ExamSchedule_Input.name.split('/')[-1])  # so it doesnt show entire path
 
     # Handle disbling/enabling buttons based on what you've uploaded
     if uploaded_file_name_1_str.get() != '':
         save_output_button['state'] = 'normal'
         # display_output_button['state'] = 'normal'
-
-    # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ESM Matrix
-    ESexcelToMatrix(name2)
+        
+    # This line calls the ESexcelToMatrix method to take in the exam schedule input and put the data into the ExamScheduleMatrix Matrix
+    ESexcelToMatrix(ExamSchedule_Input)
 
 
 # This is going to open a file browser
 # and the user will specify where they want the output to be saved to.
 def save_output():
-    # This line brings in the global variable name
-    global name
-    # This line opens up a file browser and lets the user decide where the output file will be saved
-    name = filedialog.asksaveasfile(mode='w', title='Save output',
-                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv"), ("All files", "*.*")))
-    # Enable 'Display/Save Output...' button once the output has been saved.
-    # If save dialog was opened and closed without saving, display button is not enabled.
-    if name is not None:
-        display_output_button['state'] = 'normal'
-    # This line calls on the exam_assignment method to use CSM and ESM matrixes to create the output data
-    exam_assignment()
-
-    # This line calls the output_writing method to output the data to the file location the user selected
-    output_writing(name)
+    if len(CourseScheduleMatrix) == 1 or len(ExamScheduleMatrix) == 1: #if either matrix is empty
+        ctypes.windll.user32.MessageBoxW(0, "Please make sure you have both files inputted to the program before "
+                                            "you save.", "Error", 1)
+    else:
+        # This line brings in the global variable file_output_name
+        global file_output_name
+        # This line opens up a file browser and lets the user decide where the output file will be saved
+        file_output_name = filedialog.asksaveasfile(mode='w', title='Save output', defaultextension=".",
+                                                    filetypes=(("Excel files", "*.xlsx"), ("CSV files", "*.csv")))
+        
+        # Enable 'Display/Save Output...' button once the output has been saved.
+        # If save dialog was opened and closed without saving, display button is not enabled.
+        if file_output_name is not None:
+             display_output_button['state'] = 'normal'
+        
+        # This line calls on the exam_assignment method to use CourseScheduleMatrix and ExamScheduleMatrix matrixes to create the output data
+        exam_assignment()
+        # This line calls the output_writing method to output the data to the file location the user selected
+        output_writing(file_output_name)
 
 
 # Called when info button is pressed
@@ -208,18 +214,18 @@ def help_callback():
 
 
 # The ESexcelToArray method will take in the information from the exam schedule file
-#  and put the data into the ESM matrix
+#  and put the data into the ExamScheduleMatrix matrix
 def ESexcelToMatrix(fa):
     # This line takes in the information from the exam schedule excel file and puts it into a pandas' data frame
     dfes = pd.read_excel(treatSelectedAddress(fa))
-    # This line brings in the glabal matrix ESM
-    global ESM
-    # This line sets ESM as a matrix containing the data in the pandas dataframe
-    ESM = dfes.as_matrix(columns=None)
+    # This line brings in the glabal matrix ExamScheduleMatrix
+    global ExamScheduleMatrix
+    # This line sets ExamScheduleMatrix as a matrix containing the data in the pandas dataframe
+    ExamScheduleMatrix = dfes.as_matrix(columns=None)
 
 
 # The ESexcelToArray method will take in the important information from the course schedule file
-#  and put the data into the CSM matrix
+#  and put the data into the CourseScheduleMatrix matrix
 def CLexcelToMatrix(fa):
     # This line takes in the information from the course schedule excel file and puts it into a pandas' data frame
     dfcl = pd.read_excel(treatSelectedAddress(fa))
@@ -249,34 +255,7 @@ def CLexcelToMatrix(fa):
                 # if they do, all important information is put into the CourseListMatrix
                 # 0 - Course Number, 1 - Course Title, 2 - Section Title, 3 - Course Start Time, 4 -Course Meeting days
                 # 5 - Building Code, 6 - Room Number
-                if re.match(r'12', end_date):
-                    CourseListMatrix[course_location][0] = dirtyCLM[x][0]
-                    CourseListMatrix[course_location][1] = dirtyCLM[x][1]
-                    CourseListMatrix[course_location][2] = dirtyCLM[x][5]
-                    CourseListMatrix[course_location][3] = dirtyCLM[x][9]
-                    CourseListMatrix[course_location][4] = dirtyCLM[x][13]
-                    CourseListMatrix[course_location][5] = dirtyCLM[x][14]
-                    CourseListMatrix[course_location][6] = dirtyCLM[x][15]
-                    course_location += 1
-                elif re.match(r'11', end_date):
-                    CourseListMatrix[course_location][0] = dirtyCLM[x][0]
-                    CourseListMatrix[course_location][1] = dirtyCLM[x][1]
-                    CourseListMatrix[course_location][2] = dirtyCLM[x][5]
-                    CourseListMatrix[course_location][3] = dirtyCLM[x][9]
-                    CourseListMatrix[course_location][4] = dirtyCLM[x][13]
-                    CourseListMatrix[course_location][5] = dirtyCLM[x][14]
-                    CourseListMatrix[course_location][6] = dirtyCLM[x][15]
-                    course_location += 1
-                elif re.match(r'04', end_date):
-                    CourseListMatrix[course_location][0] = dirtyCLM[x][0]
-                    CourseListMatrix[course_location][1] = dirtyCLM[x][1]
-                    CourseListMatrix[course_location][2] = dirtyCLM[x][5]
-                    CourseListMatrix[course_location][3] = dirtyCLM[x][9]
-                    CourseListMatrix[course_location][4] = dirtyCLM[x][13]
-                    CourseListMatrix[course_location][5] = dirtyCLM[x][14]
-                    CourseListMatrix[course_location][6] = dirtyCLM[x][15]
-                    course_location += 1
-                elif re.match(r'05', end_date):
+                if re.match(r'12', end_date) or re.match(r'11', end_date) or re.match(r'04', end_date) or re.match(r'05', end_date):
                     CourseListMatrix[course_location][0] = dirtyCLM[x][0]
                     CourseListMatrix[course_location][1] = dirtyCLM[x][1]
                     CourseListMatrix[course_location][2] = dirtyCLM[x][5]
@@ -289,10 +268,10 @@ def CLexcelToMatrix(fa):
             cl = 0
         except TypeError:
             cl = 0
-    # This line brings in the CSM matrix
-    global CSM
-    # This line sets CSM equal to CourseListMatrix
-    CSM = CourseListMatrix
+    # This line brings in the CourseScheduleMatrix matrix
+    global CourseScheduleMatrix
+    # This line sets CourseScheduleMatrix equal to CourseListMatrix
+    CourseScheduleMatrix = CourseListMatrix
 
 
 # The treatSelectedAddress method takes in a file address and cleans it up so it can be used in Python
@@ -302,64 +281,52 @@ def treatSelectedAddress(fileAddress):
     return strFileAddress
 
 
-# Method that takes user-provided course and exam schedules, and assigns
-# courses exam times based on provided exam schedule
-# Input: CSV files containing course information and exam information
+# Method that takes user-provided course and exam schedules,
+# and assigns courses exam times based on provided exam schedule
 # Output: Matrix containing exam information for every applicable course
 def exam_assignment():
-    global CSM
-    global ESM
+    global CourseScheduleMatrix
+    global ExamScheduleMatrix
     global output
-    output = []
-    # output = [[0 for i in range(8)] for j in range(len(CSM))]
-    for x in range(len(CSM)):  # for each course in course list:
+
+    for x in range(len(CourseScheduleMatrix)):  # for each course in course schedule
         closest_time = None  # reset the closest exam time for each course
 
-        # CSM[x][4] Course meeting days
-        # CSM[x][3] Course start time
-        # ESM[x][0] Exam course meeting days
-        # ESM[x][1] Exam course start time
+        # CourseScheduleMatrix[x][4] Course meeting days
+        # CourseScheduleMatrix[x][3] Course start time
+        # ExamScheduleMatrix[x][0] Exam course meeting days
+        # ExamScheduleMatrix[x][1] Exam course start time
 
-        for y in range(len(ESM)):  # for each exam time in exam schedule
-            # if course meeting days match exam schedule course meeting days,
-            # and course start time match exam schedule course start time
-            if CSM[x][4] == ESM[y][0] and CSM[x][3] == ESM[y][1]:
-                # output[x][0] = CSM[x][0]  # course number
-                # output[x][1] = CSM[x][1]  # course title
-                # output[x][2] = CSM[x][2]  # section number
-                # output[x][3] = CSM[x][5]  # building code
-                # output[x][4] = CSM[x][6]  # room number
-                # output[x][5] = ESM[y][2]  # exam date
-                # output[x][6] = ESM[y][3]  # exam start time
-                # output[x][7] = ESM[y][4]  # exam end time
-                output.append([CSM[x][0], CSM[x][1], CSM[x][2], CSM[x][5], CSM[x][6], ESM[y][2], ESM[y][3], ESM[y][4]])
+        for y in range(len(ExamScheduleMatrix)):  # for each exam time in exam schedule
+            # if course meeting days match the exam schedule course meeting days,
+            # and course start time matches the exam schedule course start time
+            if CourseScheduleMatrix[x][4] == ExamScheduleMatrix[y][0] and CourseScheduleMatrix[x][3] == ExamScheduleMatrix[y][1]:
+                # output[x][0] = CourseScheduleMatrix[x][0]  # course number
+                # output[x][1] = CourseScheduleMatrix[x][1]  # course title
+                # output[x][2] = CourseScheduleMatrix[x][2]  # section number
+                # output[x][3] = CourseScheduleMatrix[x][5]  # building code
+                # output[x][4] = CourseScheduleMatrix[x][6]  # room number
+                # output[x][5] = ExamScheduleMatrix[y][2]  # exam date
+                # output[x][6] = ExamScheduleMatrix[y][3]  # exam start time
+                # output[x][7] = ExamScheduleMatrix[y][4]  # exam end time
+                output.append([CourseScheduleMatrix[x][0], CourseScheduleMatrix[x][1], CourseScheduleMatrix[x][2], CourseScheduleMatrix[x][5], CourseScheduleMatrix[x][6], ExamScheduleMatrix[y][2], ExamScheduleMatrix[y][3], ExamScheduleMatrix[y][4]])
                 break  # perfect match found, break out of loop
-            # perfect match hasn't been found yet, find the closest exam time
-            elif (closest_time is None or closest_time > (CSM[x][3] - ESM[y][1])) and CSM[x][4] == ESM[y][0]:
-                # new solution tracks the index of ESM which give the closest time
-                # then appends a row with those indexed values if a perfect match is not found after loop has concluded
-                # is this solution be better? It uses 2 more integer variables, but doesnt assign values in each pass
-                closest_time = CSM[x][3] - ESM[y][1]
-                closest_y = y  # index row of exam with the closest time
-                # output[x][0] = CSM[x][0]  # course number
-                # output[x][1] = CSM[x][1]  # course title
-                # output[x][2] = CSM[x][2]  # section number
-                # output[x][3] = CSM[x][5]  # building code
-                # output[x][4] = CSM[x][6]  # room number
-                # output[x][5] = ESM[y][2]  # exam date
-                # output[x][6] = ESM[y][3]  # exam start time
-                # output[x][7] = ESM[y][4]  # exam end time
-            # if a match hasn't been found, append row of course information and exam time of closest normal course time
-            if (y == len(ESM) - 1) and closest_time is not None:
-                output.append(
-                    [CSM[x][0], CSM[x][1], CSM[x][2], CSM[x][5], CSM[x][6], ESM[closest_y][2], ESM[closest_y][3],
-                     ESM[closest_y][4]])
 
-    # output: Course Number, Course Title, Section Number, Building code, Room Number, Exam Date, Exam Start Time, Exam End Time
+            # perfect match hasn't been found yet, find the closest exam time
+            elif (closest_time is None or closest_time > (CourseScheduleMatrix[x][3] - ExamScheduleMatrix[y][1])) and CourseScheduleMatrix[x][4] == ExamScheduleMatrix[y][0]:
+                # Determine closest time block for the course and record its index from the Exam schedule matrix
+                # Closest time will be the smallest difference between the course time from CourseScheduleMatrix and the course time from ExamScheduleMatrix
+
+                closest_time = CourseScheduleMatrix[x][3] - ExamScheduleMatrix[y][1]
+                closest_y = y  # row of exam schedule matrix with the closest time
+
+            # if a match hasn't been found, append row of course information and exam time of closest normal course time
+            if (y == len(ExamScheduleMatrix) - 1) and closest_time is not None:
+                output.append([CourseScheduleMatrix[x][0], CourseScheduleMatrix[x][1], CourseScheduleMatrix[x][2], CourseScheduleMatrix[x][5], CourseScheduleMatrix[x][6], ExamScheduleMatrix[closest_y][2], ExamScheduleMatrix[closest_y][3], ExamScheduleMatrix[closest_y][4]])
 
 
 # The output_writing method will output the data to the excel file selected by the user
-def output_writing(name):
+def output_writing(file_name):
     # This line brings in the global matrix output
     global output
     # This line defines the headers for the output
@@ -368,13 +335,18 @@ def output_writing(name):
     # This line creates a pandas dataframe with the data and header
     df = pd.DataFrame(data=output, columns=dataColumns)
     # This line calls the treatSelectedAddress method to clean up the output file location
-    treatedName = treatSelectedAddress(name)
-    # This line creates a writer to write to the excel file
-    writer = pd.ExcelWriter(treatedName, engine='xlsxwriter')
-    # This line puts the information from the dataframe to the excel file
-    df.to_excel(writer, sheet_name='Sheet1', index=False)
-    # This line saves the excel file and closes the writer
-    writer.save()
+    treatedName = treatSelectedAddress(file_name)
+
+    l = len(treatedName)
+    if re.match(r'.xlsx', treatedName[l - 5: l]):
+        # This line creates a writer to write to the excel file
+        writer = pd.ExcelWriter(treatedName, engine='xlsxwriter')
+        # This line puts the information from the dataframe to the excel file
+        df.to_excel(writer, sheet_name='Sheet1', index=False)
+        # This line saves the excel file and closes the writer
+        writer.save()
+    else :
+        df.to_csv(treatedName, index=False, header=dataColumns)
 
 
 def GUI():
