@@ -126,14 +126,14 @@ def info_callback():
 
     button1 = tk.Button(info_popup, text="Close", command=info_popup.destroy)
 
-    title_message.grid(row=1, sticky='n')
-    seperator.grid(row=2, column=0, columnspan=2, sticky='ew')
-    popup_message.grid(row=3)
-    button1.grid(row=4, pady=(0, 20))
+    title_message.grid(row=0, sticky='n')
+    seperator.grid(row=1, column=0, columnspan=2, sticky='ew')
+    popup_message.grid(row=2)
+    button1.grid(row=3, pady=(0, 20))
 
     info_popup.focus()
-    info_popup.rowconfigure(0, weight=2, minsize=45)
-    info_popup.columnconfigure(0, weight=2, minsize=45)
+    info_popup.rowconfigure(2, weight=2, minsize=300)
+    info_popup.columnconfigure(0, weight=2, minsize=300)
     info_popup.mainloop()
 
 
@@ -197,12 +197,13 @@ def help_callback():
     seperator = ttk.Separator(help_popup, orient='horizontal')
 
     title_message.grid(row=1, sticky='n')
-    seperator.grid(row=2, column=0, columnspan=2, sticky='ew')
+    seperator.grid(row=2, column=0, sticky='ew')
 
     for m in messages:
         m.grid(sticky='w')
     button1 = tk.Button(help_popup, text="Close", command=help_popup.destroy)
     button1.grid(pady=(20, 20))
+    help_popup.columnconfigure(0, weight=2, minsize=25)
     help_popup.mainloop()
 
 
@@ -497,9 +498,12 @@ def GUI():
     about_button.pack(side="left")
     help_button.pack(side="right")
 
-    # about_button.grid(row=9, column=1, columnspan=2, padx=(0, 12), sticky='E')
-    # help_button.grid(row=9, column=2, columnspan=2, sticky='W')
-    # root.rowconfigure(7, weight=2, minsize=45) # this is the stuff for moving buttons around when the window is resized
+    # this is the stuff for moving buttons around when the window is resized
+    root.columnconfigure(0, weight=2, minsize=125)
+    root.columnconfigure(1, weight=2, minsize=125)
+    root.rowconfigure(2, weight=2, minsize=1)
+    root.rowconfigure(7, weight=2, minsize=21)
+
 
     # Make the window persistent
     root.mainloop()
