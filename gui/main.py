@@ -103,7 +103,6 @@ def save_output():
 
 # Called when info button is pressed
 # Prints the INFO section of the README file
-# Someday, we will make it so this function causes a popup with the info printed onto it
 def info_callback():
     global info_popup  # This must be global so we can check if it's open
     info_popup = tk.Toplevel()
@@ -167,7 +166,6 @@ def open_popup(pressed):
 
 # Called when help button is pressed
 # Prints the HELP section of the README file
-# Someday, we will make it so this function causes a popup with the info printed onto it
 def help_callback():
     global help_popup
     help_popup = tk.Toplevel()
@@ -292,23 +290,23 @@ def exam_assignment():
     for x in range(len(CourseScheduleMatrix)):  # for each course in course schedule
         closest_time = None  # reset the closest exam time for each course
 
-        # CourseScheduleMatrix[x][4] Course meeting days
-        # CourseScheduleMatrix[x][3] Course start time
-        # ExamScheduleMatrix[x][0] Exam course meeting days
-        # ExamScheduleMatrix[x][1] Exam course start time
+        #[4] Course meeting days
+        #[3] Course start time
+        #[0] Exam course meeting days
+        #[1] Exam course start time
 
         for y in range(len(ExamScheduleMatrix)):  # for each exam time in exam schedule
             # if course meeting days match the exam schedule course meeting days,
             # and course start time matches the exam schedule course start time
             if CourseScheduleMatrix[x][4] == ExamScheduleMatrix[y][0] and CourseScheduleMatrix[x][3] == ExamScheduleMatrix[y][1]:
-                # output[x][0] = CourseScheduleMatrix[x][0]  # course number
-                # output[x][1] = CourseScheduleMatrix[x][1]  # course title
-                # output[x][2] = CourseScheduleMatrix[x][2]  # section number
-                # output[x][3] = CourseScheduleMatrix[x][5]  # building code
-                # output[x][4] = CourseScheduleMatrix[x][6]  # room number
-                # output[x][5] = ExamScheduleMatrix[y][2]  # exam date
-                # output[x][6] = ExamScheduleMatrix[y][3]  # exam start time
-                # output[x][7] = ExamScheduleMatrix[y][4]  # exam end time
+                #[0]  # course number
+                #[1]  # course title
+                #[2]  # section number 
+                #[3]  # building code (5 on scheduleMatrix)
+                #[4]  # room number (6 on scheduleMatrix)
+                #[5]  # exam date (2 on scheduleMatrix)
+                #[6]  # exam start time (3 on scheduleMatrix)
+                #[7]  # exam end time (4 on scheduleMatrix)
                 output.append([CourseScheduleMatrix[x][0], CourseScheduleMatrix[x][1], CourseScheduleMatrix[x][2], CourseScheduleMatrix[x][5], CourseScheduleMatrix[x][6], ExamScheduleMatrix[y][2], ExamScheduleMatrix[y][3], ExamScheduleMatrix[y][4]])
                 break  # perfect match found, break out of loop
 
